@@ -1,4 +1,4 @@
-CREATE TABLE "posts_table" (
+CREATE TABLE "blogs" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" text NOT NULL,
 	"content" text NOT NULL,
@@ -15,4 +15,4 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
-ALTER TABLE "posts_table" ADD CONSTRAINT "posts_table_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "blogs" ADD CONSTRAINT "blogs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;

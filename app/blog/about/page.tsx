@@ -1,4 +1,4 @@
-export default function About() {
+export default async function About() {
 	return (
 		<div className="mt-3">
 			<h1 className="font-bold text-2xl lg:text-3xl">About</h1>
