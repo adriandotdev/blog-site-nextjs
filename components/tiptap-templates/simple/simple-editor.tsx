@@ -184,9 +184,15 @@ const MobileToolbarContent = ({
 
 type SimpleEditorProps = {
 	isEditable: boolean;
+	blogTitle?: string;
+	blogContent?: string;
 };
 
-export function SimpleEditor({ isEditable }: SimpleEditorProps) {
+export function SimpleEditor({
+	isEditable,
+	blogTitle,
+	blogContent,
+}: SimpleEditorProps) {
 	const isMobile = useIsMobile();
 	const windowSize = useWindowSize();
 	const [mobileView, setMobileView] = React.useState<
@@ -194,8 +200,8 @@ export function SimpleEditor({ isEditable }: SimpleEditorProps) {
 	>("main");
 	const toolbarRef = React.useRef<HTMLDivElement>(null);
 
-	const [title, setTitle] = useState("");
-	const [content, setContent] = useState("");
+	const [title, setTitle] = useState(blogTitle ?? "");
+	const [content, setContent] = useState(blogContent ?? "");
 	const [isPublishing, setPublishing] = useState(false);
 
 	const titleEditor = useEditor({
@@ -282,7 +288,7 @@ export function SimpleEditor({ isEditable }: SimpleEditorProps) {
 
 	return (
 		<EditorContext.Provider value={{ editor }}>
-			{!titleEditor?.isEmpty && !editor?.isEmpty && (
+			{!titleEditor?.isEmpty && !editor?.isEmpty && isEditable && (
 				<div className="flex gap-2 justify-end mt-3">
 					<ShadCnButton>Save as Draft</ShadCnButton>
 					<ShadCnButton

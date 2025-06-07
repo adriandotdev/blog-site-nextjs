@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { blogs, InsertBlogs, users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -29,4 +30,10 @@ export async function publishBlog(blog: InsertBlogs) {
 	revalidatePath("/blogs");
 
 	redirect("/blogs");
+}
+
+export async function getBlogById(id: number) {
+	const blog = await db.select().from(blogs).where(eq(blogs.id, id));
+
+	return blog[0];
 }
