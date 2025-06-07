@@ -1,6 +1,8 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import { ModeToggle } from "@/components/theme-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -25,17 +27,27 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<SidebarProvider>
-					<AppSidebar />
-					<main className="mx-3 w-full mt-3">
-						<SidebarTrigger />
-						{children}
-					</main>
-				</SidebarProvider>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<SidebarProvider>
+						<AppSidebar />
+						<main className="mx-3 w-full mt-3 overflow-y-auto">
+							<div className="flex justify-between w-full px-3">
+								<SidebarTrigger />
+								<ModeToggle />
+							</div>
+							{children}
+						</main>
+					</SidebarProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	);

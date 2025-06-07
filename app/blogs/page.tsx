@@ -6,6 +6,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+
 import { getBlogs } from "../actions";
 
 export default async function BlogIndex() {
