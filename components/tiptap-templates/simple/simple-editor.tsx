@@ -81,7 +81,11 @@ import Placeholder from "@tiptap/extension-placeholder";
 
 import { publishBlog } from "@/app/actions";
 import { Button as ShadCnButton } from "@/components/ui/button";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Document } from "@tiptap/extension-document";
+import { all, createLowlight } from "lowlight";
+
+const lowlight = createLowlight(all);
 
 const MainToolbarContent = ({
 	onHighlighterClick,
@@ -263,6 +267,11 @@ export function SimpleEditor({
 			}),
 			TrailingNode,
 			Link.configure({ openOnClick: false }),
+			CodeBlockLowlight.configure({
+				lowlight,
+				defaultLanguage: "javascript",
+				languageClassPrefix: "language-",
+			}),
 			Placeholder.configure({
 				placeholder: "Write something…",
 			}),
