@@ -81,6 +81,8 @@ import Placeholder from "@tiptap/extension-placeholder";
 
 import { publishBlog } from "@/app/actions";
 import { Button as ShadCnButton } from "@/components/ui/button";
+import { Document } from "@tiptap/extension-document";
+
 const MainToolbarContent = ({
 	onHighlighterClick,
 	onLinkClick,
@@ -204,25 +206,21 @@ export function SimpleEditor({
 	const [content, setContent] = useState(blogContent ?? "");
 	const [isPublishing, setPublishing] = useState(false);
 
+	const CustomDocument = Document.extend({
+		content: "heading",
+	});
+
 	const titleEditor = useEditor({
-		editorProps: {
-			attributes: {
-				autocomplete: "off",
-				autocorrect: "on",
-				autocapitalize: "off",
-				"aria-label": "Main content area, start typing to enter text.",
-			},
-		},
-		editable: isEditable,
 		extensions: [
+			CustomDocument,
 			StarterKit.configure({
+				document: false,
 				heading: {
 					levels: [1],
 				},
 			}),
-			TextAlign.configure({ types: ["heading"] }),
 			Placeholder.configure({
-				placeholder: "Your blog title here",
+				placeholder: "Your title here",
 			}),
 		],
 		content: title,

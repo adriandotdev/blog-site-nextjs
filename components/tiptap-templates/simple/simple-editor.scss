@@ -94,6 +94,22 @@ body {
 	pointer-events: none;
 }
 
+.tiptap h1.is-editor-empty:first-child::before {
+	color: #adb5bd;
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+}
+
+.tiptap h1.is-empty::before {
+	color: #adb5bd;
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+}
+
 @media screen and (max-width: 480px) {
 	.simple-editor-content .tiptap.ProseMirror {
 		padding: 1rem 1.5rem;
