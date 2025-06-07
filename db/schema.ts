@@ -16,6 +16,7 @@ export const blogs = pgTable("blogs", {
 		.references(() => users.id, { onDelete: "cascade" }),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at")
+		.defaultNow()
 		.notNull()
 		.$onUpdate(() => new Date()),
 });
@@ -23,5 +24,5 @@ export const blogs = pgTable("blogs", {
 export type InsertUser = typeof users.$inferInsert;
 export type SelectUser = typeof users.$inferSelect;
 
-export type InsertPost = typeof blogs.$inferInsert;
-export type SelectPost = typeof blogs.$inferSelect;
+export type InsertBlogs = typeof blogs.$inferInsert;
+export type SelectBlogs = typeof blogs.$inferSelect;
