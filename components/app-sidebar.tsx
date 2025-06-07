@@ -17,12 +17,12 @@ import { usePathname } from "next/navigation";
 const items = [
 	{
 		title: "My Blogs",
-		url: "/blog",
+		url: "/blogs",
 		icon: Home,
 	},
 	{
 		title: "About",
-		url: "/blog/about",
+		url: "/blogs/about",
 		icon: InfoIcon,
 	},
 ];
