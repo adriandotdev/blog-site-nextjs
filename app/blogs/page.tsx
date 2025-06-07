@@ -14,7 +14,7 @@ export default async function BlogIndex() {
 	const blogs = await getBlogs();
 
 	return (
-		<div className="max-w-[100vw] pt-3">
+		<div className="max-w-[100vw] pt-3 px-3">
 			<div className="flex justify-between items-center lg:justify-start lg:gap-5">
 				<h1 className="text-2xl lg:text-3xl font-bold">Welcome Blogs</h1>
 				<Link href={"/blogs/create"}>

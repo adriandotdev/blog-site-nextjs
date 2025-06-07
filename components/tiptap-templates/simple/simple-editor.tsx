@@ -79,6 +79,7 @@ import { useState } from "react";
 
 import Placeholder from "@tiptap/extension-placeholder";
 
+import { publishBlog } from "@/app/actions";
 import { Button as ShadCnButton } from "@/components/ui/button";
 const MainToolbarContent = ({
 	onHighlighterClick,
@@ -192,7 +193,10 @@ export function SimpleEditor({ isEditable }: SimpleEditorProps) {
 		"main" | "highlighter" | "link"
 	>("main");
 	const toolbarRef = React.useRef<HTMLDivElement>(null);
+
+	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
+	const [isPublishing, setPublishing] = useState(false);
 
 	const titleEditor = useEditor({
 		editorProps: {
@@ -215,6 +219,10 @@ export function SimpleEditor({ isEditable }: SimpleEditorProps) {
 				placeholder: "Your blog title here",
 			}),
 		],
+		content: title,
+		onUpdate: ({ editor }: { editor: Editor }) => {
+			setTitle(editor.getHTML());
+		},
 	});
 
 	const editor = useEditor({
@@ -274,10 +282,25 @@ export function SimpleEditor({ isEditable }: SimpleEditorProps) {
 
 	return (
 		<EditorContext.Provider value={{ editor }}>
-			<div className="flex gap-2 justify-end mt-3">
-				<ShadCnButton>Save as Draft</ShadCnButton>
-				<ShadCnButton>Publish</ShadCnButton>
-			</div>
+			{!titleEditor?.isEmpty && !editor?.isEmpty && (
+				<div className="flex gap-2 justify-end mt-3">
+					<ShadCnButton>Save as Draft</ShadCnButton>
+					<ShadCnButton
+						onClick={async () => {
+							try {
+								setPublishing(true);
+								await publishBlog({ title, content, userId: 1 });
+							} catch (err) {
+								console.error("Error in publishing a blog", err);
+							} finally {
+								setPublishing(false);
+							}
+						}}
+					>
+						{isPublishing ? "Publishing..." : "Publish"}
+					</ShadCnButton>
+				</div>
+			)}
 			<Toolbar
 				ref={toolbarRef}
 				style={
