@@ -12,7 +12,6 @@ export async function createUser() {
 }
 
 export async function getBlogs() {
-	await new Promise((resolve) => setTimeout(resolve, 3000));
 	const userBlogs = await db.select().from(blogs);
 
 	return userBlogs;

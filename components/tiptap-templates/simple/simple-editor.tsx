@@ -67,7 +67,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowSize } from "@/hooks/use-window-size";
 
 // --- Components ---
-import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle";
 
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
@@ -80,6 +79,7 @@ import { useState } from "react";
 
 import Placeholder from "@tiptap/extension-placeholder";
 
+import { Button as ShadCnButton } from "@/components/ui/button";
 const MainToolbarContent = ({
 	onHighlighterClick,
 	onLinkClick,
@@ -148,10 +148,6 @@ const MainToolbarContent = ({
 			<Spacer />
 
 			{isMobile && <ToolbarSeparator />}
-
-			<ToolbarGroup>
-				<ThemeToggle />
-			</ToolbarGroup>
 		</>
 	);
 };
@@ -185,7 +181,11 @@ const MobileToolbarContent = ({
 	</>
 );
 
-export function SimpleEditor() {
+type SimpleEditorProps = {
+	isEditable: boolean;
+};
+
+export function SimpleEditor({ isEditable }: SimpleEditorProps) {
 	const isMobile = useIsMobile();
 	const windowSize = useWindowSize();
 	const [mobileView, setMobileView] = React.useState<
@@ -193,6 +193,29 @@ export function SimpleEditor() {
 	>("main");
 	const toolbarRef = React.useRef<HTMLDivElement>(null);
 	const [content, setContent] = useState("");
+
+	const titleEditor = useEditor({
+		editorProps: {
+			attributes: {
+				autocomplete: "off",
+				autocorrect: "on",
+				autocapitalize: "off",
+				"aria-label": "Main content area, start typing to enter text.",
+			},
+		},
+		editable: isEditable,
+		extensions: [
+			StarterKit.configure({
+				heading: {
+					levels: [1],
+				},
+			}),
+			TextAlign.configure({ types: ["heading"] }),
+			Placeholder.configure({
+				placeholder: "Your blog title here",
+			}),
+		],
+	});
 
 	const editor = useEditor({
 		immediatelyRender: false,
@@ -204,11 +227,10 @@ export function SimpleEditor() {
 				"aria-label": "Main content area, start typing to enter text.",
 			},
 		},
+		editable: isEditable,
 		extensions: [
 			StarterKit,
-			Placeholder.configure({
-				placeholder: "Write something...",
-			}),
+
 			TextAlign.configure({ types: ["heading", "paragraph"] }),
 			Underline,
 			TaskList,
@@ -229,6 +251,9 @@ export function SimpleEditor() {
 			}),
 			TrailingNode,
 			Link.configure({ openOnClick: false }),
+			Placeholder.configure({
+				placeholder: "Write something…",
+			}),
 		],
 		content: content,
 		onUpdate: ({ editor }: { editor: Editor }) => {
@@ -249,15 +274,22 @@ export function SimpleEditor() {
 
 	return (
 		<EditorContext.Provider value={{ editor }}>
+			<div className="flex gap-2 justify-end mt-3">
+				<ShadCnButton>Save as Draft</ShadCnButton>
+				<ShadCnButton>Publish</ShadCnButton>
+			</div>
 			<Toolbar
 				ref={toolbarRef}
 				style={
 					isMobile
 						? {
 								bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+								overflow: "auto",
 						  }
 						: {}
 				}
+				className="overflow-x-auto mt-3 "
+				variant={`${isMobile ? "floating" : "fixed"}`}
 			>
 				{mobileView === "main" ? (
 					<MainToolbarContent
@@ -273,7 +305,8 @@ export function SimpleEditor() {
 				)}
 			</Toolbar>
 
-			<div className="content-wrapper overflow-y-scroll">
+			<div className="content-wrapper  overflow-y-scroll">
+				<EditorContent editor={titleEditor} className="title-editor-content" />
 				<EditorContent
 					editor={editor}
 					role="presentation"
