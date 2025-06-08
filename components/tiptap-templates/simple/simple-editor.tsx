@@ -237,6 +237,7 @@ export function SimpleEditor({
 			}),
 		],
 		content: title,
+		editable: isEditable,
 		onUpdate: ({ editor }: { editor: Editor }) => {
 			setTitle(editor.getHTML());
 		},
