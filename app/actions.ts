@@ -24,6 +24,7 @@ export async function publishBlog(blog: InsertBlogs) {
 	await db.insert(blogs).values({
 		title: blog.title,
 		content: blog.content,
+		description: blog.description,
 		userId: blog.userId,
 	});
 

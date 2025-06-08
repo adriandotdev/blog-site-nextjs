@@ -190,6 +190,7 @@ const MobileToolbarContent = ({
 
 type SimpleEditorProps = {
 	isEditable: boolean;
+	isViewing?: boolean;
 	blogTitle?: string;
 	blogDescription?: string;
 	blogContent?: string;
@@ -197,6 +198,7 @@ type SimpleEditorProps = {
 
 export function SimpleEditor({
 	isEditable,
+	isViewing,
 	blogTitle,
 	blogDescription,
 	blogContent,
@@ -250,6 +252,7 @@ export function SimpleEditor({
 				placeholder: "Blog description",
 			}),
 		],
+		editable: isEditable,
 		content: description,
 		onUpdate: ({ editor }: { editor: Editor }) => {
 			setDescription(editor.getHTML());
@@ -305,6 +308,9 @@ export function SimpleEditor({
 		},
 	});
 
+	const shouldDisable = () =>
+		titleEditor?.isEmpty || editor?.isEmpty || !isEditable;
+
 	const bodyRect = useCursorVisibility({
 		editor,
 		overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
@@ -318,14 +324,21 @@ export function SimpleEditor({
 
 	return (
 		<EditorContext.Provider value={{ editor }}>
-			{!titleEditor?.isEmpty && !editor?.isEmpty && isEditable && (
+			{!isViewing && (
 				<div className="flex gap-2 justify-end mt-3">
-					<ShadCnButton>Save as Draft</ShadCnButton>
 					<ShadCnButton
+						className="disabled:cursor-not-allowed"
+						disabled={shouldDisable()}
+					>
+						Save as Draft
+					</ShadCnButton>
+					<ShadCnButton
+						className="disabled:cursor-not-allowed"
+						disabled={shouldDisable()}
 						onClick={async () => {
 							try {
 								setPublishing(true);
-								await publishBlog({ title, content, userId: 1 });
+								await publishBlog({ title, description, content, userId: 1 });
 							} catch (err) {
 								console.error("Error in publishing a blog", err);
 							} finally {
@@ -337,6 +350,7 @@ export function SimpleEditor({
 					</ShadCnButton>
 				</div>
 			)}
+
 			<Toolbar
 				ref={toolbarRef}
 				style={

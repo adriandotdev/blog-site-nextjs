@@ -22,7 +22,9 @@ export default async function BlogPage({ params }: { params: Params }) {
 			</div>
 			<SimpleEditor
 				isEditable={false}
+				isViewing={true}
 				blogTitle={blog.title}
+				blogDescription={blog.description as unknown as string}
 				blogContent={blog.content}
 			/>
 		</div>
