@@ -23,6 +23,17 @@ export default async function BlogIndex() {
 				{blogs.map(async (blog) => {
 					return <BlogCard key={blog.id} blog={blog} />;
 				})}
+				{blogs.length === 0 && (
+					<div className="flex flex-col">
+						<h1 className="text-2xl lg:text-3xl font-bold text-center lg:text-left text-slate-950 dark:text-slate-200 mt-5">
+							You haven’t published any blogs yet.
+						</h1>
+						<p className="text-center font-medium lg:text-left">
+							Start sharing your thoughts — your first post is just a click
+							away!
+						</p>
+					</div>
+				)}
 			</div>
 		</div>
 	);
