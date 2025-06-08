@@ -1,10 +1,11 @@
 CREATE TABLE "blogs" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" text NOT NULL,
+	"description" text,
 	"content" text NOT NULL,
 	"user_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (

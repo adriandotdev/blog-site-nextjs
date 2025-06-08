@@ -1,18 +1,10 @@
 "use server";
 
 import { db } from "@/db";
-import { blogs, InsertBlogs, users } from "@/db/schema";
+import { blogs, InsertBlogs } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
-
-export async function createUser() {
-	await db.insert(users).values({
-		name: "Adrian",
-		email: "nads@gigrewards.ph",
-		password: "password",
-	});
-}
 
 export async function getBlogs() {
 	const userBlogs = await db.select().from(blogs);

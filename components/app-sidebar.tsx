@@ -1,5 +1,4 @@
 "use client";
-
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,7 +12,6 @@ import {
 import clsx from "clsx";
 import { Home, InfoIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-
 const items = [
 	{
 		title: "My Blogs",

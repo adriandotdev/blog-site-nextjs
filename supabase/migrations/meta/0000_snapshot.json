@@ -1,5 +1,5 @@
 {
-  "id": "e6b681e5-196d-42c1-9ee3-d99f44b7b1de",
+  "id": "806318b1-1741-4b38-a562-009d106fc234",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -19,6 +19,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "content": {
           "name": "content",
@@ -43,7 +49,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
