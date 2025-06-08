@@ -1,15 +1,10 @@
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 
+import BlogCard from "@/components/blog-card";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { getBlogs } from "../actions";
+
 export default async function BlogIndex() {
 	const blogs = await getBlogs();
 
@@ -25,19 +20,9 @@ export default async function BlogIndex() {
 			</div>
 
 			<div className="mt-4 flex gap-5 flex-wrap">
-				{blogs.map((blog) => (
-					<Card key={blog.id} className="w-full max-w-md min-h-[8rem] ">
-						<CardHeader className="flex flex-col">
-							<CardTitle>{blog.title}</CardTitle>
-							<CardDescription>{blog.content}</CardDescription>
-						</CardHeader>
-						<CardFooter>
-							<Link href={`/blogs/${blog.id}`}>
-								<Button>Read more {">>"}</Button>
-							</Link>
-						</CardFooter>
-					</Card>
-				))}
+				{blogs.map(async (blog) => {
+					return <BlogCard key={blog.id} blog={blog} />;
+				})}
 			</div>
 		</div>
 	);
