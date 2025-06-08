@@ -21,7 +21,6 @@ import { Selection } from "@/components/tiptap-extension/selection-extension";
 import { TrailingNode } from "@/components/tiptap-extension/trailing-node-extension";
 
 // --- UI Primitives ---
-import { Button } from "@/components/tiptap-ui-primitive/button";
 import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
 	Toolbar,
@@ -42,24 +41,16 @@ import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
 import {
 	ColorHighlightPopover,
 	ColorHighlightPopoverButton,
-	ColorHighlightPopoverContent,
 } from "@/components/tiptap-ui/color-highlight-popover";
 import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
 import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
-import {
-	LinkButton,
-	LinkContent,
-	LinkPopover,
-} from "@/components/tiptap-ui/link-popover";
+import { LinkButton, LinkPopover } from "@/components/tiptap-ui/link-popover";
 import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
 import { MarkButton } from "@/components/tiptap-ui/mark-button";
 import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
 import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
 
 // --- Icons ---
-import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
-import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 
 // --- Hooks ---
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
@@ -91,102 +82,112 @@ const MainToolbarContent = ({
 	onHighlighterClick,
 	onLinkClick,
 	isMobile,
+	isEditable,
+	isViewing,
 }: {
 	onHighlighterClick: () => void;
 	onLinkClick: () => void;
 	isMobile: boolean;
+	isEditable: boolean;
+	isViewing: boolean;
 }) => {
 	return (
 		<>
-			<Spacer />
+			{isEditable && !isViewing && (
+				<>
+					<Spacer />
 
-			<ToolbarGroup>
-				<UndoRedoButton action="undo" />
-				<UndoRedoButton action="redo" />
-			</ToolbarGroup>
+					<ToolbarGroup>
+						<UndoRedoButton action="undo" />
+						<UndoRedoButton action="redo" />
+					</ToolbarGroup>
 
-			<ToolbarSeparator />
+					<ToolbarSeparator />
 
-			<ToolbarGroup>
-				<HeadingDropdownMenu levels={[1, 2, 3, 4]} />
-				<ListDropdownMenu types={["bulletList", "orderedList", "taskList"]} />
-				<BlockQuoteButton />
-				<CodeBlockButton />
-			</ToolbarGroup>
+					<ToolbarGroup>
+						<HeadingDropdownMenu levels={[1, 2, 3, 4]} />
+						<ListDropdownMenu
+							types={["bulletList", "orderedList", "taskList"]}
+						/>
+						<BlockQuoteButton />
+						<CodeBlockButton />
+					</ToolbarGroup>
 
-			<ToolbarSeparator />
+					<ToolbarSeparator />
 
-			<ToolbarGroup>
-				<MarkButton type="bold" />
-				<MarkButton type="italic" />
-				<MarkButton type="strike" />
-				<MarkButton type="code" />
-				<MarkButton type="underline" />
-				{!isMobile ? (
-					<ColorHighlightPopover />
-				) : (
-					<ColorHighlightPopoverButton onClick={onHighlighterClick} />
-				)}
-				{!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
-			</ToolbarGroup>
+					<ToolbarGroup>
+						<MarkButton type="bold" />
+						<MarkButton type="italic" />
+						<MarkButton type="strike" />
+						<MarkButton type="code" />
+						<MarkButton type="underline" />
+						{!isMobile ? (
+							<ColorHighlightPopover />
+						) : (
+							<ColorHighlightPopoverButton onClick={onHighlighterClick} />
+						)}
+						{!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+					</ToolbarGroup>
 
-			<ToolbarSeparator />
+					<ToolbarSeparator />
 
-			<ToolbarGroup>
-				<MarkButton type="superscript" />
-				<MarkButton type="subscript" />
-			</ToolbarGroup>
+					<ToolbarGroup>
+						<MarkButton type="superscript" />
+						<MarkButton type="subscript" />
+					</ToolbarGroup>
 
-			<ToolbarSeparator />
+					<ToolbarSeparator />
 
-			<ToolbarGroup>
-				<TextAlignButton align="left" />
-				<TextAlignButton align="center" />
-				<TextAlignButton align="right" />
-				<TextAlignButton align="justify" />
-			</ToolbarGroup>
+					<ToolbarGroup>
+						<TextAlignButton align="left" />
+						<TextAlignButton align="center" />
+						<TextAlignButton align="right" />
+						<TextAlignButton align="justify" />
+					</ToolbarGroup>
 
-			<ToolbarSeparator />
+					<ToolbarSeparator />
 
-			<ToolbarGroup>
-				<ImageUploadButton text="Add" />
-			</ToolbarGroup>
+					<ToolbarGroup>
+						<ImageUploadButton text="Add" />
+					</ToolbarGroup>
 
-			<Spacer />
+					<Spacer />
 
-			{isMobile && <ToolbarSeparator />}
+					{isMobile && <ToolbarSeparator />}
+				</>
+			)}
 		</>
 	);
 };
 
-const MobileToolbarContent = ({
-	type,
-	onBack,
-}: {
-	type: "highlighter" | "link";
-	onBack: () => void;
-}) => (
-	<>
-		<ToolbarGroup>
-			<Button data-style="ghost" onClick={onBack}>
-				<ArrowLeftIcon className="tiptap-button-icon" />
-				{type === "highlighter" ? (
-					<HighlighterIcon className="tiptap-button-icon" />
-				) : (
-					<LinkIcon className="tiptap-button-icon" />
-				)}
-			</Button>
-		</ToolbarGroup>
+// const MobileToolbarContent = ({
+// 	type,
+// 	onBack,
+// }: {
+// 	type: "highlighter" | "link";
+// 	onBack: () => void;
+// }) => (
+// 	<>
+// 		<ToolbarGroup>
+// 			<Button data-style="ghost" onClick={onBack}>
+// 				<ArrowLeftIcon className="tiptap-button-icon" />
+// 				{type === "highlighter" ? (
+// 					<HighlighterIcon className="tiptap-button-icon" />
+// 				) : (
+// 					<LinkIcon className="tiptap-button-icon" />
+// 				)}
+// 			</Button>
+// 		</ToolbarGroup>
 
-		<ToolbarSeparator />
+// 		<ToolbarSeparator />
 
-		{type === "highlighter" ? (
-			<ColorHighlightPopoverContent />
-		) : (
-			<LinkContent />
-		)}
-	</>
-);
+// 		{type === "highlighter" ? (
+// 			<ColorHighlightPopoverContent />
+// 		) : (
+// 			<LinkContent />
+// 		)}
+// 	</>
+// );
 
 type SimpleEditorProps = {
 	isEditable: boolean;
@@ -365,7 +366,7 @@ export function SimpleEditor({
 				className="overflow-x-auto mt-3 "
 				variant={`${isMobile ? "floating" : "fixed"}`}
 			>
-				{mobileView === "main" ? (
+				{/* {mobileView === "main" && !isViewing ? (
 					<MainToolbarContent
 						onHighlighterClick={() => setMobileView("highlighter")}
 						onLinkClick={() => setMobileView("link")}
@@ -376,7 +377,14 @@ export function SimpleEditor({
 						type={mobileView === "highlighter" ? "highlighter" : "link"}
 						onBack={() => setMobileView("main")}
 					/>
-				)}
+				)} */}
+				<MainToolbarContent
+					onHighlighterClick={() => setMobileView("highlighter")}
+					onLinkClick={() => setMobileView("link")}
+					isMobile={isMobile}
+					isEditable={isEditable}
+					isViewing={isViewing as boolean}
+				/>
 			</Toolbar>
 
 			<div className="content-wrapper  overflow-y-scroll">

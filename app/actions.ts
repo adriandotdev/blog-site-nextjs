@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { blogs, InsertBlogs, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export async function createUser() {
 	await db.insert(users).values({
@@ -35,6 +35,8 @@ export async function publishBlog(blog: InsertBlogs) {
 
 export async function getBlogById(id: number) {
 	const blog = await db.select().from(blogs).where(eq(blogs.id, id));
+
+	if (blog.length === 0) notFound();
 
 	return blog[0];
 }
