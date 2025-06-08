@@ -191,12 +191,14 @@ const MobileToolbarContent = ({
 type SimpleEditorProps = {
 	isEditable: boolean;
 	blogTitle?: string;
+	blogDescription?: string;
 	blogContent?: string;
 };
 
 export function SimpleEditor({
 	isEditable,
 	blogTitle,
+	blogDescription,
 	blogContent,
 }: SimpleEditorProps) {
 	const isMobile = useIsMobile();
@@ -207,16 +209,21 @@ export function SimpleEditor({
 	const toolbarRef = React.useRef<HTMLDivElement>(null);
 
 	const [title, setTitle] = useState(blogTitle ?? "");
+	const [description, setDescription] = useState(blogDescription ?? "");
 	const [content, setContent] = useState(blogContent ?? "");
 	const [isPublishing, setPublishing] = useState(false);
 
-	const CustomDocument = Document.extend({
+	const TitleDocument = Document.extend({
 		content: "heading",
+	});
+
+	const DescriptionDocument = Document.extend({
+		content: "paragraph",
 	});
 
 	const titleEditor = useEditor({
 		extensions: [
-			CustomDocument,
+			TitleDocument,
 			StarterKit.configure({
 				document: false,
 				heading: {
@@ -230,6 +237,22 @@ export function SimpleEditor({
 		content: title,
 		onUpdate: ({ editor }: { editor: Editor }) => {
 			setTitle(editor.getHTML());
+		},
+	});
+
+	const descriptionEditor = useEditor({
+		extensions: [
+			DescriptionDocument,
+			StarterKit.configure({
+				document: false,
+			}),
+			Placeholder.configure({
+				placeholder: "Blog description",
+			}),
+		],
+		content: description,
+		onUpdate: ({ editor }: { editor: Editor }) => {
+			setDescription(editor.getHTML());
 		},
 	});
 
@@ -343,6 +366,10 @@ export function SimpleEditor({
 
 			<div className="content-wrapper  overflow-y-scroll">
 				<EditorContent editor={titleEditor} className="title-editor-content" />
+				<EditorContent
+					editor={descriptionEditor}
+					className="description-editor-content"
+				/>
 				<EditorContent
 					editor={editor}
 					role="presentation"

@@ -70,12 +70,22 @@ body {
 	margin: 0 auto;
 }
 
+.description-editor-content {
+	max-width: 640px;
+	width: 100%;
+	margin: 0 auto;
+}
+
 .simple-editor-content .tiptap.ProseMirror {
 	padding: 3rem 3rem;
 }
 
 .title-editor-content .tiptap.ProseMirror {
 	padding: 3rem 0rem 0rem 3rem;
+}
+
+.description-editor-content .tiptap.ProseMirror {
+	padding: 0rem 0rem 0rem 3rem;
 }
 
 .tiptap p.is-editor-empty:first-child::before {

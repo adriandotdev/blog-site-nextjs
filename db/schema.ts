@@ -10,6 +10,7 @@ export const users = pgTable("users", {
 export const blogs = pgTable("blogs", {
 	id: serial("id").primaryKey(),
 	title: text("title").notNull(),
+	description: text("description"),
 	content: text("content").notNull(),
 	userId: integer("user_id")
 		.notNull()
