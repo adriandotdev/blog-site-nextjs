@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import clsx from "clsx";
 import { Home, InfoIcon } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoutButton from "./logout-button";
 const items = [
@@ -39,7 +40,7 @@ export function AppSidebar() {
 							{items.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton asChild>
-										<a
+										<Link
 											href={item.url}
 											className={clsx(
 												pathname === item.url &&
@@ -48,7 +49,7 @@ export function AppSidebar() {
 										>
 											<item.icon />
 											<span>{item.title}</span>
-										</a>
+										</Link>
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
