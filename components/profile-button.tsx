@@ -20,7 +20,7 @@ export default function ProfileButton() {
 	return (
 		<>
 			<Separator className="mt-3 mb-2" />
-			<DropdownMenu>
+			<DropdownMenu dir="ltr">
 				<DropdownMenuTrigger asChild>
 					<div className="flex items-center gap-2 cursor-pointer hover:bg-slate-100 p-2 rounded-md dark:hover:bg-slate-800">
 						{session.data?.user?.image && (
