@@ -1,4 +1,5 @@
 "use client";
+import ProfileButton from "@/components/profile-button";
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,7 +14,7 @@ import clsx from "clsx";
 import { Home, InfoIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import LogoutButton from "./logout-button";
+
 const items = [
 	{
 		title: "My Blogs",
@@ -53,7 +54,7 @@ export function AppSidebar() {
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
-							<LogoutButton />
+							<ProfileButton />
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
