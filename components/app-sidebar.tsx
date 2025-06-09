@@ -12,6 +12,7 @@ import {
 import clsx from "clsx";
 import { Home, InfoIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import LogoutButton from "./logout-button";
 const items = [
 	{
 		title: "My Blogs",
@@ -32,8 +33,8 @@ export function AppSidebar() {
 		<Sidebar>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>Welcome to Blog Site</SidebarGroupLabel>
-					<SidebarGroupContent>
+					<SidebarGroupLabel className="text-sm">Blog Site</SidebarGroupLabel>
+					<SidebarGroupContent className="mt-2">
 						<SidebarMenu>
 							{items.map((item) => (
 								<SidebarMenuItem key={item.title}>
@@ -51,6 +52,7 @@ export function AppSidebar() {
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
+							<LogoutButton />
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>

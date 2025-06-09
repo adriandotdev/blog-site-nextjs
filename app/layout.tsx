@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 import { archivo, geistMono, geistSans } from "@/lib/fonts";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
 	title: "Blog Site",
@@ -26,7 +27,9 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<main className="w-full overflow-y-auto">{children}</main>
+					<SessionProvider>
+						<main className="w-full overflow-y-auto">{children}</main>
+					</SessionProvider>
 				</ThemeProvider>
 			</body>
 		</html>

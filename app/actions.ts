@@ -1,8 +1,9 @@
 "use server";
 
 import { db } from "@/db";
-import { blogs, InsertBlogs } from "@/db/schema";
+import { blogs, InsertBlogs, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 
@@ -31,4 +32,21 @@ export async function getBlogById(id: number) {
 	if (blog.length === 0) notFound();
 
 	return blog[0];
+}
+
+export async function existingUser(email: string) {
+	const [existingUser] = await db
+		.select()
+		.from(users)
+		.where(eq(users.email, email));
+
+	return existingUser;
+}
+
+export async function insertNewUser(user: User) {
+	await db.insert(users).values({
+		email: user.email ?? "",
+		name: user.name ?? "",
+		password: "",
+	});
 }
