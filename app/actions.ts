@@ -7,18 +7,28 @@ import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 
-export async function getBlogs() {
-	const userBlogs = await db.select().from(blogs);
+export async function getBlogs(email: string) {
+	console.log(email);
+	const userBlogs = await db
+		.select()
+		.from(blogs)
+		.leftJoin(users, eq(blogs.userId, users.id))
+		.where(eq(users.email, email));
 
 	return userBlogs;
 }
 
-export async function publishBlog(blog: InsertBlogs) {
+export async function publishBlog(
+	blog: Omit<InsertBlogs, "userId">,
+	email: string
+) {
+	const [user] = await db.select().from(users).where(eq(users.email, email));
+
 	await db.insert(blogs).values({
 		title: blog.title,
 		content: blog.content,
 		description: blog.description,
-		userId: blog.userId,
+		userId: user.id,
 	});
 
 	revalidatePath("/blogs");

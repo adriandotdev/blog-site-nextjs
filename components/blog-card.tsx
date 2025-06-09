@@ -27,7 +27,10 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 				/>
 				<CardDescription
 					dangerouslySetInnerHTML={{
-						__html: sanitizeHtml(blog?.description as string) ?? "",
+						__html:
+							truncate(sanitizeHtml(blog?.description as string), {
+								length: 126,
+							}) ?? "",
 					}}
 				/>
 			</CardHeader>

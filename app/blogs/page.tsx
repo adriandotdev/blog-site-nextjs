@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 
+import { auth } from "@/auth";
 import BlogCard from "@/components/blog-card";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { getBlogs } from "../actions";
 
 export default async function BlogIndex() {
-	const blogs = await getBlogs();
+	const session = await auth();
+
+	const userEmail = session?.user?.email;
+	const data = await getBlogs(userEmail as string);
 
 	return (
 		<div className="max-w-[100vw] py-3 px-3">
@@ -20,10 +24,10 @@ export default async function BlogIndex() {
 			</div>
 
 			<div className="mt-4 flex gap-5 flex-wrap">
-				{blogs.map(async (blog) => {
-					return <BlogCard key={blog.id} blog={blog} />;
+				{data.map(async (row) => {
+					return <BlogCard key={row.blogs.id} blog={row.blogs} />;
 				})}
-				{blogs.length === 0 && (
+				{data.length === 0 && (
 					<div className="flex flex-col">
 						<h1 className="text-2xl lg:text-3xl font-bold text-center lg:text-left text-slate-950 dark:text-slate-200 mt-5">
 							You haven’t published any blogs yet.

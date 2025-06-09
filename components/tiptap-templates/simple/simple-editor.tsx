@@ -75,6 +75,7 @@ import { Button as ShadCnButton } from "@/components/ui/button";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Document } from "@tiptap/extension-document";
 import { all, createLowlight } from "lowlight";
+import { useSession } from "next-auth/react";
 
 const lowlight = createLowlight(all);
 
@@ -204,6 +205,8 @@ export function SimpleEditor({
 	blogDescription,
 	blogContent,
 }: SimpleEditorProps) {
+	const session = useSession();
+
 	const isMobile = useIsMobile();
 	const windowSize = useWindowSize();
 	const [mobileView, setMobileView] = React.useState<
@@ -340,7 +343,14 @@ export function SimpleEditor({
 						onClick={async () => {
 							try {
 								setPublishing(true);
-								await publishBlog({ title, description, content, userId: 1 });
+								await publishBlog(
+									{
+										title,
+										description,
+										content,
+									},
+									session.data?.user?.email as string
+								);
 							} catch (err) {
 								console.error("Error in publishing a blog", err);
 							} finally {
