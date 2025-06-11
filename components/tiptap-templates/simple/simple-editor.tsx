@@ -422,7 +422,13 @@ export function SimpleEditor({
 					className="description-editor-content"
 				/>
 				{editor && (
-					<BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+					<BubbleMenu
+						editor={editor}
+						tippyOptions={{
+							duration: 100,
+							placement: "auto",
+						}}
+					>
 						<div className="bubble-menu">
 							<ToolbarGroup>
 								<MarkButton type="bold" />
