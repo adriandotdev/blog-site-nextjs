@@ -32,6 +32,9 @@ importers:
       '@tiptap/core':
         specifier: ^2.14.0
         version: 2.14.0(@tiptap/pm@2.14.0)
+      '@tiptap/extension-bubble-menu':
+        specifier: ^2.14.0
+        version: 2.14.0(@tiptap/core@2.14.0(@tiptap/pm@2.14.0))(@tiptap/pm@2.14.0)
       '@tiptap/extension-code-block':
         specifier: ^2.14.0
         version: 2.14.0(@tiptap/core@2.14.0(@tiptap/pm@2.14.0))(@tiptap/pm@2.14.0)

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	BubbleMenu,
 	Editor,
 	EditorContent,
 	EditorContext,
@@ -397,6 +398,41 @@ export function SimpleEditor({
 					editor={descriptionEditor}
 					className="description-editor-content"
 				/>
+				{editor && (
+					<BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+						<div className="bubble-menu">
+							<ToolbarGroup>
+								<MarkButton type="bold" />
+								<MarkButton type="italic" />
+								<MarkButton type="strike" />
+								<MarkButton type="code" />
+								<MarkButton type="underline" />
+								{/* {!isMobile ? (
+									<ColorHighlightPopover />
+								) : (
+									<ColorHighlightPopoverButton onClick={onHighlighterClick} />
+								)}
+								{!isMobile ? (
+									<LinkPopover />
+								) : (
+									<LinkButton onClick={onLinkClick} />
+								)} */}
+							</ToolbarGroup>
+							<ToolbarSeparator />
+							<ToolbarGroup>
+								<TextAlignButton align="left" />
+								<TextAlignButton align="center" />
+								<TextAlignButton align="right" />
+								<TextAlignButton align="justify" />
+							</ToolbarGroup>
+
+							<ToolbarGroup>
+								<MarkButton type="superscript" />
+								<MarkButton type="subscript" />
+							</ToolbarGroup>
+						</div>
+					</BubbleMenu>
+				)}
 				<EditorContent
 					editor={editor}
 					role="presentation"

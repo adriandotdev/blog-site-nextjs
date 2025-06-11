@@ -14,18 +14,17 @@ import { FileEditIcon, HeartIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import sanitizeHtml from "sanitize-html";
 export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 	const session = useSession();
 
 	if (!session.data?.user) return;
 
-	const redirectTo = React.useCallback(() => {
+	const redirectTo = () => {
 		if (blog.status === "draft") return `/blogs/drafts/${blog.id}`;
 
 		return `/blogs/${blog.id}`;
-	}, [blog]);
+	};
 
 	return (
 		<Card

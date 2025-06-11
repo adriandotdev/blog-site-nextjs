@@ -136,6 +136,28 @@ body {
 	background: inherit;
 }
 
+.bubble-menu {
+	background-color: var(--color-white);
+	border: 0.3px solid var(--color-slate-950);
+	border-radius: 0.7rem;
+	box-shadow: var(--drop-shadow-2xl);
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0.2rem;
+	gap: 1rem;
+	width: auto;
+	max-width: max-content;
+
+	.dark & {
+		button {
+			background-color: unset;
+			.tiptap-button-icon {
+				color: black;
+			}
+		}
+	}
+}
+
 @media screen and (max-width: 480px) {
 	.simple-editor-content .tiptap.ProseMirror {
 		padding: 2rem 1.5rem;
