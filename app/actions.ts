@@ -2,18 +2,18 @@
 
 import { db } from "@/db";
 import { blogs, InsertBlogs, users } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 
-export async function getBlogs(email: string) {
+export async function getBlogs(email: string, status: string) {
 	console.log(email);
 	const userBlogs = await db
 		.select()
 		.from(blogs)
 		.leftJoin(users, eq(blogs.userId, users.id))
-		.where(eq(users.email, email));
+		.where(and(eq(users.email, email), eq(blogs.status, status)));
 
 	return userBlogs;
 }

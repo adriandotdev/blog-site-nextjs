@@ -1,30 +1,18 @@
-import { Button } from "@/components/ui/button";
-
+import { getBlogs } from "@/app/actions";
 import { auth } from "@/auth";
 import BlogCard from "@/components/blog-card";
-import { PencilIcon } from "lucide-react";
-import Link from "next/link";
-import { getBlogs } from "../actions";
 
-export default async function BlogIndex() {
+export default async function DraftsPage() {
 	const session = await auth();
 
-	const userEmail = session?.user?.email;
-	const name = session?.user?.name;
-	const data = await getBlogs(userEmail as string, "published");
+	const data = await getBlogs(session?.user?.email as string, "draft");
 
 	return (
 		<div className="max-w-[100vw] py-3 px-3">
 			<div className="flex justify-between items-center lg:justify-start lg:gap-5">
 				<h1 className="text-2xl lg:text-3xl font-bold font-archivo">
-					Welcome, {name}
+					My Drafts
 				</h1>
-				<Link href={"/blogs/create"}>
-					<Button>
-						<PencilIcon />
-						Write
-					</Button>
-				</Link>
 			</div>
 
 			<div className="mt-4 flex gap-5 flex-wrap">
@@ -34,11 +22,10 @@ export default async function BlogIndex() {
 				{data.length === 0 && (
 					<div className="flex flex-col w-full">
 						<h1 className="text-2xl lg:text-3xl font-bold text-center lg:text-left text-slate-950 dark:text-slate-200 mt-5">
-							You haven’t published any blogs yet.
+							No drafts yet.
 						</h1>
 						<p className="text-center font-medium lg:text-left">
-							Start sharing your thoughts — your first post is just a click
-							away!
+							Save your thoughts as drafts while you write.
 						</p>
 					</div>
 				)}

@@ -11,7 +11,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import clsx from "clsx";
-import { Home, InfoIcon } from "lucide-react";
+import { InfoIcon, Notebook, PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -19,12 +19,17 @@ const items = [
 	{
 		title: "My Blogs",
 		url: "/blogs",
-		icon: Home,
+		icon: Notebook,
 	},
 	{
 		title: "About",
 		url: "/blogs/about",
 		icon: InfoIcon,
+	},
+	{
+		title: "Drafts",
+		url: "/blogs/drafts",
+		icon: PencilIcon,
 	},
 ];
 
