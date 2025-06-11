@@ -12,9 +12,10 @@ export const blogs = pgTable("blogs", {
 	title: text("title").notNull(),
 	description: text("description"),
 	content: text("content").notNull(),
-	userId: integer("user_id")
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+	userId: integer("user_id").references(() => users.id, {
+		onDelete: "cascade",
+	}),
+	status: text("status").notNull().default("published"),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at")
 		.defaultNow()

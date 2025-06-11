@@ -29,6 +29,7 @@ export async function publishBlog(
 		content: blog.content,
 		description: blog.description,
 		userId: user.id,
+		status: "published",
 	});
 
 	revalidatePath("/blogs");
