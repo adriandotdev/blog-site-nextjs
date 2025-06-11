@@ -76,7 +76,7 @@ import { useState } from "react";
 
 import Placeholder from "@tiptap/extension-placeholder";
 
-import { publishBlog } from "@/app/actions";
+import { publishBlog, saveBlogAsDraft } from "@/app/actions";
 import CodeBlockComponent from "@/components/custom-tiptap/CodeBlock";
 import { Button as ShadCnButton } from "@/components/ui/button";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
@@ -192,10 +192,30 @@ export function SimpleEditor({
 	>("main");
 	const toolbarRef = React.useRef<HTMLDivElement>(null);
 
+	// States
 	const [title, setTitle] = useState(blogTitle ?? "");
 	const [description, setDescription] = useState(blogDescription ?? "");
 	const [content, setContent] = useState(blogContent ?? "");
 	const [isPublishing, setPublishing] = useState(false);
+	const [isSavingAsDraft, setSaveAsDraft] = useState(false);
+
+	const handleSavingAsDraft = React.useCallback(async () => {
+		try {
+			setSaveAsDraft(true);
+			await saveBlogAsDraft(
+				{
+					title,
+					description,
+					content,
+				},
+				session.data?.user?.email as string
+			);
+		} catch (err) {
+			console.error("Error in saving blog as draft", err);
+		} finally {
+			setSaveAsDraft(false);
+		}
+	}, [content, description, session.data?.user?.email, title]);
 
 	const TitleDocument = Document.extend({
 		content: "heading",
@@ -319,8 +339,9 @@ export function SimpleEditor({
 					<ShadCnButton
 						className="disabled:cursor-not-allowed"
 						disabled={shouldDisable()}
+						onClick={handleSavingAsDraft}
 					>
-						Save as Draft
+						{isSavingAsDraft ? "Saving..." : "Save as draft"}
 					</ShadCnButton>
 					<ShadCnButton
 						className="disabled:cursor-not-allowed"
@@ -361,18 +382,6 @@ export function SimpleEditor({
 				className="overflow-x-auto mt-3 "
 				variant={`${isMobile ? "floating" : "fixed"}`}
 			>
-				{/* {mobileView === "main" && !isViewing ? (
-					<MainToolbarContent
-						onHighlighterClick={() => setMobileView("highlighter")}
-						onLinkClick={() => setMobileView("link")}
-						isMobile={isMobile}
-					/>
-				) : (
-					<MobileToolbarContent
-						type={mobileView === "highlighter" ? "highlighter" : "link"}
-						onBack={() => setMobileView("main")}
-					/>
-				)} */}
 				<MainToolbarContent
 					onHighlighterClick={() => setMobileView("highlighter")}
 					onLinkClick={() => setMobileView("link")}

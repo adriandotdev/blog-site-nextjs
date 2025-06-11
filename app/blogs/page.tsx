@@ -15,7 +15,7 @@ export default async function BlogIndex() {
 
 	return (
 		<div className="max-w-[100vw] py-3 px-3">
-			<div className="flex justify-between items-center lg:justify-start lg:gap-5">
+			<div className="flex flex-col gap-2  lg:flex-row lg:gap-5">
 				<h1 className="text-2xl lg:text-3xl font-bold font-archivo">
 					Welcome, {name}
 				</h1>

@@ -37,6 +37,25 @@ export async function publishBlog(
 	redirect("/blogs");
 }
 
+export async function saveBlogAsDraft(
+	blog: Omit<InsertBlogs, "userId">,
+	email: string
+) {
+	const [user] = await db.select().from(users).where(eq(users.email, email));
+
+	await db.insert(blogs).values({
+		title: blog.title,
+		content: blog.content,
+		description: blog.description,
+		userId: user.id,
+		status: "draft",
+	});
+
+	revalidatePath("/blogs/drafts");
+
+	redirect("/blogs");
+}
+
 export async function getBlogById(id: number) {
 	const blog = await db.select().from(blogs).where(eq(blogs.id, id));
 
