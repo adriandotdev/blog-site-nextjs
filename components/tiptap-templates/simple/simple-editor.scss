@@ -120,6 +120,22 @@ body {
 	pointer-events: none;
 }
 
+.copyButton {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background: inherit;
+	color: inherit;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+	border-radius: 3px;
+}
+
+.copyButton:hover {
+	background: inherit;
+}
+
 @media screen and (max-width: 480px) {
 	.simple-editor-content .tiptap.ProseMirror {
 		padding: 2rem 1.5rem;

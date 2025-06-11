@@ -1,6 +1,12 @@
 "use client";
 
-import { Editor, EditorContent, EditorContext, useEditor } from "@tiptap/react";
+import {
+	Editor,
+	EditorContent,
+	EditorContext,
+	ReactNodeViewRenderer,
+	useEditor,
+} from "@tiptap/react";
 import * as React from "react";
 
 // --- Tiptap Core Extensions ---
@@ -71,6 +77,7 @@ import { useState } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 
 import { publishBlog } from "@/app/actions";
+import CodeBlockComponent from "@/components/custom-tiptap/CodeBlock";
 import { Button as ShadCnButton } from "@/components/ui/button";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Document } from "@tiptap/extension-document";
@@ -161,35 +168,6 @@ const MainToolbarContent = ({
 	);
 };
 
-// const MobileToolbarContent = ({
-// 	type,
-// 	onBack,
-// }: {
-// 	type: "highlighter" | "link";
-// 	onBack: () => void;
-// }) => (
-// 	<>
-// 		<ToolbarGroup>
-// 			<Button data-style="ghost" onClick={onBack}>
-// 				<ArrowLeftIcon className="tiptap-button-icon" />
-// 				{type === "highlighter" ? (
-// 					<HighlighterIcon className="tiptap-button-icon" />
-// 				) : (
-// 					<LinkIcon className="tiptap-button-icon" />
-// 				)}
-// 			</Button>
-// 		</ToolbarGroup>
-
-// 		<ToolbarSeparator />
-
-// 		{type === "highlighter" ? (
-// 			<ColorHighlightPopoverContent />
-// 		) : (
-// 			<LinkContent />
-// 		)}
-// 	</>
-// );
-
 type SimpleEditorProps = {
 	isEditable: boolean;
 	isViewing?: boolean;
@@ -276,7 +254,9 @@ export function SimpleEditor({
 		},
 		editable: isEditable,
 		extensions: [
-			StarterKit,
+			StarterKit.configure({
+				codeBlock: false,
+			}),
 
 			TextAlign.configure({ types: ["heading", "paragraph"] }),
 			Underline,
@@ -298,10 +278,15 @@ export function SimpleEditor({
 			}),
 			TrailingNode,
 			Link.configure({ openOnClick: false }),
-			CodeBlockLowlight.configure({
+			CodeBlockLowlight.extend({
+				addNodeView() {
+					return ReactNodeViewRenderer(CodeBlockComponent);
+				},
+			}).configure({
 				lowlight,
 				defaultLanguage: "javascript",
 				languageClassPrefix: "language-",
+				exitOnArrowDown: true,
 			}),
 			Placeholder.configure({
 				placeholder: "Write something…",
