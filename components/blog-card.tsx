@@ -21,7 +21,7 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 	if (!session.data?.user) return;
 
 	const redirectTo = () => {
-		if (blog.status === "draft") return `/blogs/drafts/${blog.id}`;
+		if (blog.status === "draft") return `/blogs/write?draft=true&id=${blog.id}`;
 
 		return `/blogs/${blog.id}`;
 	};
@@ -72,7 +72,7 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 			</Link>
 			<CardFooter>
 				{blog.status === "draft" && (
-					<Link href={`/blogs/drafts/${blog.id}`}>
+					<Link href={`/blogs/write?draft=true&id=${blog.id}`}>
 						<Button>
 							<FileEditIcon /> Continue writing
 						</Button>

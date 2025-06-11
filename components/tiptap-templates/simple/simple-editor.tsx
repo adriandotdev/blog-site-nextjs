@@ -80,8 +80,10 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { publishBlog, saveBlogAsDraft } from "@/app/actions";
 import CodeBlockComponent from "@/components/custom-tiptap/CodeBlock";
 import { Button as ShadCnButton } from "@/components/ui/button";
+import { SelectBlogs } from "@/db/schema";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Document } from "@tiptap/extension-document";
+import { isNil } from "lodash";
 import { all, createLowlight } from "lowlight";
 import { useSession } from "next-auth/react";
 
@@ -175,6 +177,7 @@ type SimpleEditorProps = {
 	blogTitle?: string;
 	blogDescription?: string;
 	blogContent?: string;
+	draftBlog?: SelectBlogs;
 };
 
 export function SimpleEditor({
@@ -183,6 +186,7 @@ export function SimpleEditor({
 	blogTitle,
 	blogDescription,
 	blogContent,
+	draftBlog,
 }: SimpleEditorProps) {
 	const session = useSession();
 
@@ -205,6 +209,7 @@ export function SimpleEditor({
 			setSaveAsDraft(true);
 			await saveBlogAsDraft(
 				{
+					id: draftBlog?.id ?? undefined,
 					title,
 					description,
 					content,
@@ -216,7 +221,26 @@ export function SimpleEditor({
 		} finally {
 			setSaveAsDraft(false);
 		}
-	}, [content, description, session.data?.user?.email, title]);
+	}, [content, description, session.data?.user?.email, title, draftBlog]);
+
+	const handlePublish = React.useCallback(async () => {
+		try {
+			setPublishing(true);
+			await publishBlog(
+				{
+					id: draftBlog?.id ?? undefined,
+					title,
+					description,
+					content,
+				},
+				session.data?.user?.email as string
+			);
+		} catch (err) {
+			console.error("Error in publishing a blog", err);
+		} finally {
+			setPublishing(false);
+		}
+	}, [content, description, session.data?.user?.email, title, draftBlog]);
 
 	const TitleDocument = Document.extend({
 		content: "heading",
@@ -227,6 +251,7 @@ export function SimpleEditor({
 	});
 
 	const titleEditor = useEditor({
+		immediatelyRender: false,
 		extensions: [
 			TitleDocument,
 			StarterKit.configure({
@@ -247,6 +272,7 @@ export function SimpleEditor({
 	});
 
 	const descriptionEditor = useEditor({
+		immediatelyRender: false,
 		extensions: [
 			DescriptionDocument,
 			StarterKit.configure({
@@ -333,6 +359,19 @@ export function SimpleEditor({
 		}
 	}, [isMobile, mobileView]);
 
+	React.useEffect(() => {
+		if (!isNil(draftBlog)) {
+			console.log("not null", draftBlog);
+			setTitle(draftBlog.title);
+			setDescription(draftBlog.description ?? "");
+			setContent(draftBlog.content);
+
+			titleEditor?.commands.setContent(draftBlog.title);
+			descriptionEditor?.commands.setContent(draftBlog.description);
+			editor?.commands.setContent(draftBlog.content);
+		}
+	}, [draftBlog, titleEditor, descriptionEditor, editor]);
+
 	return (
 		<EditorContext.Provider value={{ editor }}>
 			{!isViewing && (
@@ -347,23 +386,7 @@ export function SimpleEditor({
 					<ShadCnButton
 						className="disabled:cursor-not-allowed"
 						disabled={shouldDisable()}
-						onClick={async () => {
-							try {
-								setPublishing(true);
-								await publishBlog(
-									{
-										title,
-										description,
-										content,
-									},
-									session.data?.user?.email as string
-								);
-							} catch (err) {
-								console.error("Error in publishing a blog", err);
-							} finally {
-								setPublishing(false);
-							}
-						}}
+						onClick={handlePublish}
 					>
 						{isPublishing ? "Publishing..." : "Publish"}
 					</ShadCnButton>

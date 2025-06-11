@@ -24,13 +24,26 @@ export async function publishBlog(
 ) {
 	const [user] = await db.select().from(users).where(eq(users.email, email));
 
-	await db.insert(blogs).values({
-		title: blog.title,
-		content: blog.content,
-		description: blog.description,
-		userId: user.id,
-		status: "published",
-	});
+	await db
+		.insert(blogs)
+		.values({
+			id: blog.id,
+			title: blog.title,
+			content: blog.content,
+			description: blog.description,
+			userId: user.id,
+			status: "published",
+		})
+		.onConflictDoUpdate({
+			target: blogs.id,
+			set: {
+				title: blog.title,
+				content: blog.content,
+				description: blog.description,
+				status: "published",
+				updatedAt: new Date(),
+			},
+		});
 
 	revalidatePath("/blogs");
 
@@ -43,13 +56,26 @@ export async function saveBlogAsDraft(
 ) {
 	const [user] = await db.select().from(users).where(eq(users.email, email));
 
-	await db.insert(blogs).values({
-		title: blog.title,
-		content: blog.content,
-		description: blog.description,
-		userId: user.id,
-		status: "draft",
-	});
+	await db
+		.insert(blogs)
+		.values({
+			id: blog.id,
+			title: blog.title,
+			content: blog.content,
+			description: blog.description,
+			userId: user.id,
+			status: "draft",
+		})
+		.onConflictDoUpdate({
+			target: blogs.id,
+			set: {
+				title: blog.title,
+				content: blog.content,
+				description: blog.description,
+				status: "draft",
+				updatedAt: new Date(),
+			},
+		});
 
 	revalidatePath("/blogs/drafts");
 
