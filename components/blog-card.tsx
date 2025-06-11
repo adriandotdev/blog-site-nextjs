@@ -11,8 +11,8 @@ import { SelectBlogs } from "@/db/schema";
 import { truncate } from "lodash";
 import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
+
 export default function BlogCard({ blog }: { blog: SelectBlogs }) {
-	console.log(blog);
 	return (
 		<Card
 			key={blog.id}

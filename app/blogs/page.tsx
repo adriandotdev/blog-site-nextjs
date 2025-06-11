@@ -10,12 +10,15 @@ export default async function BlogIndex() {
 	const session = await auth();
 
 	const userEmail = session?.user?.email;
+	const name = session?.user?.name;
 	const data = await getBlogs(userEmail as string);
 
 	return (
 		<div className="max-w-[100vw] py-3 px-3">
 			<div className="flex justify-between items-center lg:justify-start lg:gap-5">
-				<h1 className="text-2xl lg:text-3xl font-bold">Welcome Blogs</h1>
+				<h1 className="text-2xl lg:text-3xl font-bold font-archivo">
+					Welcome, {name}
+				</h1>
 				<Link href={"/blogs/create"}>
 					<Button>
 						New <PencilIcon />
