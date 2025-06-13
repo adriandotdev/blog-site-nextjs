@@ -81,8 +81,10 @@ import { publishBlog, saveBlogAsDraft } from "@/app/actions";
 import CodeBlockComponent from "@/components/custom-tiptap/CodeBlock";
 import { Button as ShadCnButton } from "@/components/ui/button";
 import { SelectBlogs } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Document } from "@tiptap/extension-document";
+import Dropcursor from "@tiptap/extension-dropcursor";
 import { isNil } from "lodash";
 import { all, createLowlight } from "lowlight";
 import { useSession } from "next-auth/react";
@@ -338,6 +340,7 @@ export function SimpleEditor({
 			Placeholder.configure({
 				placeholder: "Write something…",
 			}),
+			Dropcursor,
 		],
 		content: content,
 		onUpdate: ({ editor }: { editor: Editor }) => {
@@ -375,47 +378,48 @@ export function SimpleEditor({
 	return (
 		<EditorContext.Provider value={{ editor }}>
 			{!isViewing && (
-				<div className="flex gap-2 justify-end mt-3">
-					<ShadCnButton
-						className="disabled:cursor-not-allowed"
-						disabled={shouldDisable()}
-						onClick={handleSavingAsDraft}
+				<div>
+					<div className="flex gap-2 justify-end mt-3">
+						<ShadCnButton
+							className="disabled:cursor-not-allowed"
+							disabled={shouldDisable()}
+							onClick={handleSavingAsDraft}
+						>
+							{isSavingAsDraft ? "Saving..." : "Save as draft"}
+						</ShadCnButton>
+						<ShadCnButton
+							className="disabled:cursor-not-allowed"
+							disabled={shouldDisable()}
+							onClick={handlePublish}
+						>
+							{isPublishing ? "Publishing..." : "Publish"}
+						</ShadCnButton>
+					</div>
+					<Toolbar
+						ref={toolbarRef}
+						style={
+							isMobile
+								? {
+										bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+										overflow: "auto",
+								  }
+								: {}
+						}
+						className="overflow-x-auto mt-3 "
+						variant={`${isMobile ? "floating" : "fixed"}`}
 					>
-						{isSavingAsDraft ? "Saving..." : "Save as draft"}
-					</ShadCnButton>
-					<ShadCnButton
-						className="disabled:cursor-not-allowed"
-						disabled={shouldDisable()}
-						onClick={handlePublish}
-					>
-						{isPublishing ? "Publishing..." : "Publish"}
-					</ShadCnButton>
+						<MainToolbarContent
+							onHighlighterClick={() => setMobileView("highlighter")}
+							onLinkClick={() => setMobileView("link")}
+							isMobile={isMobile}
+							isEditable={isEditable}
+							isViewing={isViewing as boolean}
+						/>
+					</Toolbar>
 				</div>
 			)}
 
-			<Toolbar
-				ref={toolbarRef}
-				style={
-					isMobile
-						? {
-								bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-								overflow: "auto",
-						  }
-						: {}
-				}
-				className="overflow-x-auto mt-3 "
-				variant={`${isMobile ? "floating" : "fixed"}`}
-			>
-				<MainToolbarContent
-					onHighlighterClick={() => setMobileView("highlighter")}
-					onLinkClick={() => setMobileView("link")}
-					isMobile={isMobile}
-					isEditable={isEditable}
-					isViewing={isViewing as boolean}
-				/>
-			</Toolbar>
-
-			<div className="content-wrapper  overflow-y-scroll">
+			<div className={cn("content-wrapper  overflow-y-hidden")}>
 				<EditorContent editor={titleEditor} className="title-editor-content" />
 				<EditorContent
 					editor={descriptionEditor}

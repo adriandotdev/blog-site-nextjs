@@ -1,5 +1,5 @@
 import { getBlogById } from "@/app/actions";
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import { WriteEditor } from "@/components/tiptap-templates/simple/write-editor";
 
 export default async function Page({
 	searchParams,
@@ -14,7 +14,7 @@ export default async function Page({
 
 	return (
 		<div className="overflow-auto">
-			<SimpleEditor isEditable={true} draftBlog={blog} />
+			<WriteEditor isEditable={true} draftBlog={blog} />
 		</div>
 	);
 }

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
+import { EditorProvider } from "@/contexts/useEditor";
 import { archivo, geistMono, geistSans } from "@/lib/fonts";
 import { SessionProvider } from "next-auth/react";
 
@@ -28,7 +29,9 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<SessionProvider>
-						<main className="w-full overflow-y-auto">{children}</main>
+						<EditorProvider>
+							<main className="w-full overflow-y-auto">{children}</main>
+						</EditorProvider>
 					</SessionProvider>
 				</ThemeProvider>
 			</body>
