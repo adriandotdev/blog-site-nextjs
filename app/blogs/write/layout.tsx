@@ -50,6 +50,7 @@ import { useWindowSize } from "@/hooks/use-window-size";
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 import { useCustomEditor } from "@/contexts/useEditor";
+import { useKeyboardOffset } from "@/contexts/useKeyboardHeight";
 
 // import content from "@/components/tiptap-templates/simple/data/content.json";
 
@@ -137,6 +138,7 @@ export default function BlogLayout({
 	const windowSize = useWindowSize();
 
 	const editor = useCustomEditor();
+	const keyboardOffset = useKeyboardOffset();
 
 	const bodyRect = useCursorVisibility({
 		editor: editor.editor,
@@ -150,13 +152,14 @@ export default function BlogLayout({
 	return (
 		<EditorContext.Provider value={{ editor: editor.editor }}>
 			<div className="w-full">
+				{isMobile && <div>Keyboard offset: {keyboardOffset}</div>}
 				<Toolbar
 					ref={toolbarRef}
 					style={
 						isMobile
 							? {
 									// bottom: `calc(100dvh - ${windowSize.height - bodyRect.y}px)`,
-									bottom: 0,
+									bottom: keyboardOffset,
 									overflow: "auto",
 									position: "fixed",
 
