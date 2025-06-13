@@ -140,9 +140,11 @@ export default function BlogLayout({
 	const editor = useCustomEditor();
 	const keyboardOffset = useKeyboardOffset();
 
+	const overlayHeight = toolbarRef.current?.offsetHeight ?? 0;
+
 	const bodyRect = useCursorVisibility({
 		editor: editor.editor,
-		overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
+		overlayHeight,
 	});
 
 	const [mobileView, setMobileView] = React.useState<
@@ -152,14 +154,21 @@ export default function BlogLayout({
 	return (
 		<EditorContext.Provider value={{ editor: editor.editor }}>
 			<div className="w-full">
-				{isMobile && <div>Keyboard offset: {keyboardOffset}</div>}
+				{isMobile && (
+					<div style={{ position: "fixed", top: 0, left: 0, zIndex: 999 }}>
+						<pre>{JSON.stringify(bodyRect, null, 2)}</pre>
+					</div>
+				)}
 				<Toolbar
 					ref={toolbarRef}
 					style={
 						isMobile
 							? {
 									// bottom: `calc(100dvh - ${windowSize.height - bodyRect.y}px)`,
-									bottom: keyboardOffset,
+									// bottom: `${
+									// 	keyboardOffset + (windowSize.height - bodyRect.height)
+									// }px`,
+									bottom: `${keyboardOffset}px`,
 									overflow: "auto",
 									position: "fixed",
 

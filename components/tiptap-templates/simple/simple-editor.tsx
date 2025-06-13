@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -400,7 +401,7 @@ export function SimpleEditor({
 						style={
 							isMobile
 								? {
-										bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+										// bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
 										overflow: "auto",
 								  }
 								: {}
