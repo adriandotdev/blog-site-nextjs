@@ -7,17 +7,26 @@ export function useKeyboardOffset() {
 		const visualViewport = window.visualViewport;
 
 		const onResize = () => {
-			const offset =
-				window.innerHeight - (visualViewport?.height || window.innerHeight);
+			if (!visualViewport) return;
+
+			const offsetTop = visualViewport.offsetTop || 0;
+			const heightDiff = window.innerHeight - visualViewport.height;
+
+			// When the keyboard is visible, heightDiff will be > 0
+			// Offset must include how much the layout shifted upward (offsetTop)
+			const offset = heightDiff + offsetTop;
+
 			setKeyboardOffset(offset > 0 ? offset : 0);
 		};
 
 		visualViewport?.addEventListener("resize", onResize);
+		visualViewport?.addEventListener("scroll", onResize); // required for offsetTop updates
 
-		onResize(); // set initial
+		onResize(); // initial call
 
 		return () => {
 			visualViewport?.removeEventListener("resize", onResize);
+			visualViewport?.removeEventListener("scroll", onResize);
 		};
 	}, []);
 

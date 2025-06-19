@@ -153,7 +153,7 @@ export default function BlogLayout({
 
 	return (
 		<EditorContext.Provider value={{ editor: editor.editor }}>
-			<div className="w-full">
+			<div className="w-full relative">
 				{isMobile && (
 					<div style={{ position: "fixed", top: 0, left: 0, zIndex: 999 }}>
 						<pre>{JSON.stringify(bodyRect, null, 2)}</pre>
@@ -168,15 +168,26 @@ export default function BlogLayout({
 									// bottom: `${
 									// 	keyboardOffset + (windowSize.height - bodyRect.height)
 									// }px`,
-									bottom: `${keyboardOffset}px`,
-									overflow: "auto",
 									position: "fixed",
-
-									zIndex: 50,
+									bottom: keyboardOffset,
 									left: 0,
 									right: 0,
+									transition: "bottom 0.3s ease", // smooth appearance
+									zIndex: 1000,
 							  }
-							: {}
+							: {
+									// overflow: "auto",
+									// position: "fixed",
+									// top: 0,
+									// zIndex: 50,
+									// left: 0,
+									// right: 0,
+									// height: "auto",
+									// marginTop: 0,
+									// marginLeft: 256,
+									// display: "flex",
+									// justifyContent: "center",
+							  }
 					}
 					className="overflow-x-auto mt-3"
 					variant={`${isMobile ? "floating" : "fixed"}`}
