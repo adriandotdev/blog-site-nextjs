@@ -1,11 +1,7 @@
 "use client";
 
 import { BubbleMenu, EditorContent } from "@tiptap/react";
-import * as React from "react";
-
-// --- Tiptap Core Extensions ---
-
-// --- Custom Extensions ---
+import { useCallback, useEffect, useState } from "react";
 
 // --- UI Primitives ---
 import {
@@ -23,20 +19,11 @@ import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
 import { MarkButton } from "@/components/tiptap-ui/mark-button";
 import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
 
-// --- Icons ---
-
 // --- Hooks ---
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// --- Components ---
-
-// --- Lib ---
-
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
-
-// import content from "@/components/tiptap-templates/simple/data/content.json";
-import { useState } from "react";
 
 import { publishBlog, saveBlogAsDraft } from "@/app/actions";
 import { Button as ShadCnButton } from "@/components/ui/button";
@@ -71,9 +58,9 @@ export function WriteEditor({
 	} = useCustomEditor();
 	const isMobile = useIsMobile();
 
-	const [mobileView, setMobileView] = React.useState<
-		"main" | "highlighter" | "link"
-	>("main");
+	const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
+		"main"
+	);
 
 	// States
 
@@ -81,7 +68,7 @@ export function WriteEditor({
 	const [isSavingAsDraft, setSaveAsDraft] = useState(false);
 	const [hasInitializedDraft, setHasInitializedDraft] = useState(false);
 
-	const handleSavingAsDraft = React.useCallback(async () => {
+	const handleSavingAsDraft = useCallback(async () => {
 		try {
 			setSaveAsDraft(true);
 			await saveBlogAsDraft(
@@ -100,7 +87,7 @@ export function WriteEditor({
 		}
 	}, [content, description, session.data?.user?.email, title, draftBlog]);
 
-	const handlePublish = React.useCallback(async () => {
+	const handlePublish = useCallback(async () => {
 		try {
 			setPublishing(true);
 			await publishBlog(
@@ -122,13 +109,25 @@ export function WriteEditor({
 	const shouldDisable = () =>
 		titleEditor?.isEmpty || editor?.isEmpty || !isEditable;
 
-	React.useEffect(() => {
+	useEffect(() => {
+		setContent("");
+		setTitle("");
+		setDescription("");
+
+		if (titleEditor.commands && descriptionEditor.commands && editor.commands) {
+			titleEditor.commands.setContent("");
+			descriptionEditor.commands.setContent("");
+			editor.commands.setContent("");
+		}
+	}, []);
+
+	useEffect(() => {
 		if (!isMobile && mobileView !== "main") {
 			setMobileView("main");
 		}
 	}, [isMobile, mobileView]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const canInitialize =
 			draftBlog &&
 			!hasInitializedDraft &&
