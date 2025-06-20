@@ -53,14 +53,14 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 						)}
 					</div>
 					<CardTitle
-						className="text-2xl line-clamp-3"
+						className="text-2xl line-clamp-3 font-lora font-semibold text-slate-700 dark:text-slate-100"
 						dangerouslySetInnerHTML={{
 							__html:
 								truncate(sanitizeHtml(blog?.title), { length: 100 }) ?? "",
 						}}
 					/>
 					<CardDescription
-						className="line-clamp-2"
+						className="line-clamp-2 font-roboto leading-relaxed font-medium text-slate-500 dark:text-slate-300"
 						dangerouslySetInnerHTML={{
 							__html:
 								truncate(sanitizeHtml(blog?.description as string), {

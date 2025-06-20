@@ -10,9 +10,7 @@ export default async function DraftsPage() {
 	return (
 		<div className="max-w-[100vw] py-3 px-3">
 			<div className="flex justify-between items-center lg:justify-start lg:gap-5">
-				<h1 className="text-2xl lg:text-3xl font-bold font-archivo">
-					My Drafts
-				</h1>
+				<h1 className="text-2xl lg:text-3xl font-bold font-lora">My Drafts</h1>
 			</div>
 
 			<div className="mt-4 flex gap-5 flex-wrap">
@@ -20,8 +18,8 @@ export default async function DraftsPage() {
 					return <BlogCard key={row.blogs.id} blog={row.blogs} />;
 				})}
 				{data.length === 0 && (
-					<div className="flex flex-col w-full">
-						<h1 className="text-2xl lg:text-3xl font-bold text-center lg:text-left text-slate-950 dark:text-slate-200 mt-5">
+					<div className="flex flex-col w-full items-center pt-24">
+						<h1 className="text-2xl lg:text-3xl font-bold text-center lg:text-left text-slate-950 dark:text-slate-200 mt-5 font-lora">
 							No drafts yet.
 						</h1>
 						<p className="text-center font-medium lg:text-left">

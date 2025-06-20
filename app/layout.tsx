@@ -4,7 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 import { EditorProvider } from "@/contexts/useEditor";
-import { archivo, geistMono, geistSans } from "@/lib/fonts";
+import { lora, roboto } from "@/lib/fonts";
 import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
@@ -19,9 +19,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} ${archivo.variable} antialiased`}
-			>
+			<body className={`${lora.variable} ${roboto.variable} antialiased`}>
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"

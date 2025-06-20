@@ -202,7 +202,7 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 	return (
 		<EditorContext.Provider value={{ editor }}>
 			<div className={cn("content-wrapper overflow-y-hidden")}>
-				<EditorContent editor={titleEditor} className="title-editor-content" />
+				<EditorContent editor={titleEditor} className="title-editor-content " />
 				<div className="max-w-[640px] my-0 mx-auto px-12 w-full mb-3 flex justify-between">
 					<p className="font-medium">Adrian Nads Marcelo</p>
 					<div className="flex gap-3 text-gray-500 font-medium dark:text-gray-400">
