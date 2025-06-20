@@ -2,15 +2,14 @@
 "use client";
 
 import {
-	BubbleMenu,
 	Editor,
 	EditorContent,
 	EditorContext,
 	ReactNodeViewRenderer,
 	useEditor,
 } from "@tiptap/react";
-import * as React from "react";
-
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
 // --- Tiptap Core Extensions ---
 import { Highlight } from "@tiptap/extension-highlight";
 import { Image } from "@tiptap/extension-image";
@@ -28,14 +27,6 @@ import { Link } from "@/components/tiptap-extension/link-extension";
 import { Selection } from "@/components/tiptap-extension/selection-extension";
 import { TrailingNode } from "@/components/tiptap-extension/trailing-node-extension";
 
-// --- UI Primitives ---
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
-import {
-	Toolbar,
-	ToolbarGroup,
-	ToolbarSeparator,
-} from "@/components/tiptap-ui-primitive/toolbar";
-
 // --- Tiptap Node ---
 import "@/components/tiptap-node/code-block-node/code-block-node.scss";
 import "@/components/tiptap-node/image-node/image-node.scss";
@@ -43,29 +34,8 @@ import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/imag
 import "@/components/tiptap-node/list-node/list-node.scss";
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
 
-// --- Tiptap UI ---
-import { BlockQuoteButton } from "@/components/tiptap-ui/blockquote-button";
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
-import {
-	ColorHighlightPopover,
-	ColorHighlightPopoverButton,
-} from "@/components/tiptap-ui/color-highlight-popover";
-import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
-import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
-import { LinkButton, LinkPopover } from "@/components/tiptap-ui/link-popover";
-import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
-import { MarkButton } from "@/components/tiptap-ui/mark-button";
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
-import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
-
-// --- Icons ---
-
 // --- Hooks ---
-import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useWindowSize } from "@/hooks/use-window-size";
-
-// --- Components ---
 
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
@@ -73,16 +43,12 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
-// import content from "@/components/tiptap-templates/simple/data/content.json";
-import { useState } from "react";
-
 import Placeholder from "@tiptap/extension-placeholder";
 
-import { publishBlog, saveBlogAsDraft } from "@/app/actions";
 import CodeBlockComponent from "@/components/custom-tiptap/CodeBlock";
-import { Button as ShadCnButton } from "@/components/ui/button";
+import { Separator } from "@/components/tiptap-ui-primitive/separator";
 import { SelectBlogs } from "@/db/schema";
-import { cn } from "@/lib/utils";
+import { cn, estimateReadTimeFromHTML } from "@/lib/utils";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Document } from "@tiptap/extension-document";
 import Dropcursor from "@tiptap/extension-dropcursor";
@@ -92,158 +58,24 @@ import { useSession } from "next-auth/react";
 
 const lowlight = createLowlight(all);
 
-const MainToolbarContent = ({
-	onHighlighterClick,
-	onLinkClick,
-	isMobile,
-	isEditable,
-	isViewing,
-}: {
-	onHighlighterClick: () => void;
-	onLinkClick: () => void;
-	isMobile: boolean;
-	isEditable: boolean;
-	isViewing: boolean;
-}) => {
-	return (
-		<>
-			{isEditable && !isViewing && (
-				<>
-					<Spacer />
-
-					<ToolbarGroup>
-						<UndoRedoButton action="undo" />
-						<UndoRedoButton action="redo" />
-					</ToolbarGroup>
-
-					<ToolbarSeparator />
-
-					<ToolbarGroup>
-						<HeadingDropdownMenu levels={[1, 2, 3, 4]} />
-						<ListDropdownMenu
-							types={["bulletList", "orderedList", "taskList"]}
-						/>
-						<BlockQuoteButton />
-						<CodeBlockButton />
-					</ToolbarGroup>
-
-					<ToolbarSeparator />
-
-					<ToolbarGroup>
-						<MarkButton type="bold" />
-						<MarkButton type="italic" />
-						<MarkButton type="strike" />
-						<MarkButton type="code" />
-						<MarkButton type="underline" />
-						{!isMobile ? (
-							<ColorHighlightPopover />
-						) : (
-							<ColorHighlightPopoverButton onClick={onHighlighterClick} />
-						)}
-						{!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
-					</ToolbarGroup>
-
-					<ToolbarSeparator />
-
-					<ToolbarGroup>
-						<MarkButton type="superscript" />
-						<MarkButton type="subscript" />
-					</ToolbarGroup>
-
-					<ToolbarSeparator />
-
-					<ToolbarGroup>
-						<TextAlignButton align="left" />
-						<TextAlignButton align="center" />
-						<TextAlignButton align="right" />
-						<TextAlignButton align="justify" />
-					</ToolbarGroup>
-
-					<ToolbarSeparator />
-
-					<ToolbarGroup>
-						<ImageUploadButton text="Add" />
-					</ToolbarGroup>
-
-					<Spacer />
-
-					{isMobile && <ToolbarSeparator />}
-				</>
-			)}
-		</>
-	);
-};
-
 type SimpleEditorProps = {
 	isEditable: boolean;
 	isViewing?: boolean;
-	blogTitle?: string;
-	blogDescription?: string;
-	blogContent?: string;
-	draftBlog?: SelectBlogs;
+	blog: SelectBlogs;
 };
 
-export function SimpleEditor({
-	isEditable,
-	isViewing,
-	blogTitle,
-	blogDescription,
-	blogContent,
-	draftBlog,
-}: SimpleEditorProps) {
+export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 	const session = useSession();
 
 	const isMobile = useIsMobile();
-	const windowSize = useWindowSize();
-	const [mobileView, setMobileView] = React.useState<
-		"main" | "highlighter" | "link"
-	>("main");
-	const toolbarRef = React.useRef<HTMLDivElement>(null);
+	const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
+		"main"
+	);
 
 	// States
-	const [title, setTitle] = useState(blogTitle ?? "");
-	const [description, setDescription] = useState(blogDescription ?? "");
-	const [content, setContent] = useState(blogContent ?? "");
-	const [isPublishing, setPublishing] = useState(false);
-	const [isSavingAsDraft, setSaveAsDraft] = useState(false);
-
-	const handleSavingAsDraft = React.useCallback(async () => {
-		try {
-			setSaveAsDraft(true);
-			await saveBlogAsDraft(
-				{
-					id: draftBlog?.id ?? undefined,
-					title,
-					description,
-					content,
-				},
-				session.data?.user?.email as string
-			);
-		} catch (err) {
-			console.error("Error in saving blog as draft", err);
-		} finally {
-			setSaveAsDraft(false);
-		}
-	}, [content, description, session.data?.user?.email, title, draftBlog]);
-
-	const handlePublish = React.useCallback(async () => {
-		try {
-			setPublishing(true);
-			await publishBlog(
-				{
-					id: draftBlog?.id ?? undefined,
-					title,
-					description,
-					content,
-				},
-				session.data?.user?.email as string
-			);
-		} catch (err) {
-			console.error("Error in publishing a blog", err);
-		} finally {
-			setPublishing(false);
-		}
-	}, [content, description, session.data?.user?.email, title, draftBlog]);
+	const [title, setTitle] = useState(blog.title ?? "");
+	const [description, setDescription] = useState(blog.description ?? "");
+	const [content, setContent] = useState(blog.content ?? "");
 
 	const TitleDocument = Document.extend({
 		content: "heading",
@@ -349,124 +181,44 @@ export function SimpleEditor({
 		},
 	});
 
-	const shouldDisable = () =>
-		titleEditor?.isEmpty || editor?.isEmpty || !isEditable;
-
-	const bodyRect = useCursorVisibility({
-		editor,
-		overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-	});
-
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!isMobile && mobileView !== "main") {
 			setMobileView("main");
 		}
 	}, [isMobile, mobileView]);
 
-	React.useEffect(() => {
-		if (!isNil(draftBlog)) {
-			console.log("not null", draftBlog);
-			setTitle(draftBlog.title);
-			setDescription(draftBlog.description ?? "");
-			setContent(draftBlog.content);
+	useEffect(() => {
+		if (!isNil(blog)) {
+			setTitle(blog.title);
+			setDescription(blog.description ?? "");
+			setContent(blog.content);
 
-			titleEditor?.commands.setContent(draftBlog.title);
-			descriptionEditor?.commands.setContent(draftBlog.description);
-			editor?.commands.setContent(draftBlog.content);
+			titleEditor?.commands.setContent(blog.title);
+			descriptionEditor?.commands.setContent(blog.description);
+			editor?.commands.setContent(blog.content);
 		}
-	}, [draftBlog, titleEditor, descriptionEditor, editor]);
+	}, [blog, titleEditor, descriptionEditor, editor]);
 
 	return (
 		<EditorContext.Provider value={{ editor }}>
-			{!isViewing && (
-				<div>
-					<div className="flex gap-2 justify-end mt-3">
-						<ShadCnButton
-							className="disabled:cursor-not-allowed"
-							disabled={shouldDisable()}
-							onClick={handleSavingAsDraft}
-						>
-							{isSavingAsDraft ? "Saving..." : "Save as draft"}
-						</ShadCnButton>
-						<ShadCnButton
-							className="disabled:cursor-not-allowed"
-							disabled={shouldDisable()}
-							onClick={handlePublish}
-						>
-							{isPublishing ? "Publishing..." : "Publish"}
-						</ShadCnButton>
-					</div>
-					<Toolbar
-						ref={toolbarRef}
-						style={
-							isMobile
-								? {
-										// bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-										overflow: "auto",
-								  }
-								: {}
-						}
-						className="overflow-x-auto mt-3 "
-						variant={`${isMobile ? "floating" : "fixed"}`}
-					>
-						<MainToolbarContent
-							onHighlighterClick={() => setMobileView("highlighter")}
-							onLinkClick={() => setMobileView("link")}
-							isMobile={isMobile}
-							isEditable={isEditable}
-							isViewing={isViewing as boolean}
-						/>
-					</Toolbar>
-				</div>
-			)}
-
-			<div className={cn("content-wrapper  overflow-y-hidden")}>
+			<div className={cn("content-wrapper overflow-y-hidden")}>
 				<EditorContent editor={titleEditor} className="title-editor-content" />
+				<div className="max-w-[640px] my-0 mx-auto px-12 w-full mb-3 flex justify-between">
+					<p className="font-medium">Adrian Nads Marcelo</p>
+					<div className="flex gap-3 text-gray-500 font-medium dark:text-gray-400">
+						<p>{estimateReadTimeFromHTML(content)}</p>
+						{"·"}
+						<p>{format(new Date(blog.updatedAt), "MMMM d, yyyy")}</p>
+					</div>
+				</div>
+				<Separator
+					orientation="horizontal"
+					className=" max-w-[550px] border-[0.5] my-0 mx-auto mb-3"
+				/>
 				<EditorContent
 					editor={descriptionEditor}
 					className="description-editor-content"
 				/>
-				{editor && (
-					<BubbleMenu
-						editor={editor}
-						tippyOptions={{
-							duration: 100,
-							placement: "auto",
-						}}
-					>
-						<div className="bubble-menu">
-							<ToolbarGroup>
-								<MarkButton type="bold" />
-								<MarkButton type="italic" />
-								<MarkButton type="strike" />
-								<MarkButton type="code" />
-								<MarkButton type="underline" />
-								{/* {!isMobile ? (
-									<ColorHighlightPopover />
-								) : (
-									<ColorHighlightPopoverButton onClick={onHighlighterClick} />
-								)}
-								{!isMobile ? (
-									<LinkPopover />
-								) : (
-									<LinkButton onClick={onLinkClick} />
-								)} */}
-							</ToolbarGroup>
-							<ToolbarSeparator />
-							<ToolbarGroup>
-								<TextAlignButton align="left" />
-								<TextAlignButton align="center" />
-								<TextAlignButton align="right" />
-								<TextAlignButton align="justify" />
-							</ToolbarGroup>
-
-							<ToolbarGroup>
-								<MarkButton type="superscript" />
-								<MarkButton type="subscript" />
-							</ToolbarGroup>
-						</div>
-					</BubbleMenu>
-				)}
 				<EditorContent
 					editor={editor}
 					role="presentation"
