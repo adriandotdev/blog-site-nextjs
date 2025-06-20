@@ -201,20 +201,27 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 
 	return (
 		<EditorContext.Provider value={{ editor }}>
-			<div className={cn("content-wrapper overflow-y-hidden")}>
+			<div className={cn("content-wrapper overflow-y-hidden p-0")}>
 				<EditorContent editor={titleEditor} className="title-editor-content " />
-				<div className="max-w-[640px] my-0 mx-auto px-12 w-full mb-3 flex justify-between">
-					<p className="font-medium">Adrian Nads Marcelo</p>
-					<div className="flex gap-3 text-gray-500 font-medium dark:text-gray-400">
-						<p>{estimateReadTimeFromHTML(content)}</p>
-						{"·"}
-						<p>{format(new Date(blog.updatedAt), "MMMM d, yyyy")}</p>
-					</div>
-				</div>
-				<Separator
-					orientation="horizontal"
-					className=" max-w-[550px] border-[0.5] my-0 mx-auto mb-3"
-				/>
+				{editor && (
+					<>
+						<div className="max-w-[640px] my-0 mx-auto px-[2.5rem] w-full mb-3 flex justify-between flex-wrap mt-2">
+							<p className="font-medium">{session.data?.user?.name}</p>
+							<div className="flex gap-3 text-gray-500 font-medium dark:text-gray-400">
+								<p>{estimateReadTimeFromHTML(content)}</p>
+								{"·"}
+								<p>{format(new Date(blog.updatedAt), "MMMM d, yyyy")}</p>
+							</div>
+						</div>
+						<div className="px-[2.5rem]">
+							<Separator
+								orientation="horizontal"
+								className=" max-w-[550px] w-full ] border-[0.5] my-0 mx-auto mb-3"
+							/>
+						</div>
+					</>
+				)}
+
 				<EditorContent
 					editor={descriptionEditor}
 					className="description-editor-content"

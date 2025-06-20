@@ -8,7 +8,6 @@ export function cn(...inputs: ClassValue[]) {
 import { DomUtils, parseDocument } from "htmlparser2";
 
 export function estimateReadTimeFromHTML(htmlString: string): string {
-	console.log(htmlString);
 	const dom = parseDocument(htmlString);
 
 	// Get all <code> and <pre> tags
@@ -34,6 +33,6 @@ export function estimateReadTimeFromHTML(htmlString: string): string {
 	const codeTime = (codeLines * 3) / 60; // 3 seconds per code line
 
 	const totalTime = Math.ceil(textTime + codeTime);
-	console.log(textTime, codeTime);
+
 	return `${totalTime} min read`;
 }

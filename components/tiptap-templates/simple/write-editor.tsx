@@ -114,7 +114,11 @@ export function WriteEditor({
 		setTitle("");
 		setDescription("");
 
-		if (titleEditor.commands && descriptionEditor.commands && editor.commands) {
+		if (
+			titleEditor?.commands &&
+			descriptionEditor?.commands &&
+			editor?.commands
+		) {
 			titleEditor.commands.setContent("");
 			descriptionEditor.commands.setContent("");
 			editor.commands.setContent("");
@@ -141,9 +145,9 @@ export function WriteEditor({
 			setContent(draftBlog.content);
 
 			if (
-				titleEditor.commands &&
-				descriptionEditor.commands &&
-				editor.commands
+				titleEditor?.commands &&
+				descriptionEditor?.commands &&
+				editor?.commands
 			) {
 				titleEditor.commands.setContent(draftBlog.title ?? "");
 				descriptionEditor.commands.setContent(draftBlog.description ?? "");
@@ -152,14 +156,14 @@ export function WriteEditor({
 			setHasInitializedDraft(true);
 		}
 	}, [
-		descriptionEditor.commands,
+		descriptionEditor?.commands,
 		draftBlog,
-		editor.commands,
+		editor?.commands,
 		hasInitializedDraft,
 		setContent,
 		setDescription,
 		setTitle,
-		titleEditor.commands,
+		titleEditor?.commands,
 	]);
 
 	return (
@@ -207,8 +211,13 @@ export function WriteEditor({
 			)}
 
 			<div className={cn("content-wrapper overflow-y-hidden pb-10")}>
-				<EditorContent editor={titleEditor} className="title-editor-content" />
 				<EditorContent
+					key={"title-editor-key"}
+					editor={titleEditor}
+					className="title-editor-content"
+				/>
+				<EditorContent
+					key={"description-editor-key"}
 					editor={descriptionEditor}
 					className="description-editor-content"
 				/>
@@ -254,6 +263,7 @@ export function WriteEditor({
 					</BubbleMenu>
 				)}
 				<EditorContent
+					key={"editor-content-key"}
 					editor={editor}
 					role="presentation"
 					className="simple-editor-content"

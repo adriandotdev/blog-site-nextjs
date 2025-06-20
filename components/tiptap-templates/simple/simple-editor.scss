@@ -77,15 +77,15 @@ body {
 }
 
 .simple-editor-content .tiptap.ProseMirror {
-	padding: 1.5rem 3rem 5rem 3rem;
+	padding: 1.5rem 3rem 5rem 2.5rem;
 }
 
 .title-editor-content .tiptap.ProseMirror {
-	padding: 3rem 0rem 0rem 3rem;
+	padding: 3rem 0rem 0rem 2.5rem;
 }
 
 .description-editor-content .tiptap.ProseMirror {
-	padding: 0rem 0rem 0rem 3rem;
+	padding: 0rem 0rem 0rem 2.5rem;
 }
 
 .tiptap p.is-editor-empty:first-child::before {
