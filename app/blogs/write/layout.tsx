@@ -3,10 +3,6 @@
 import { EditorContext } from "@tiptap/react";
 import * as React from "react";
 
-// --- Tiptap Core Extensions ---
-
-// --- Custom Extensions ---
-
 // --- UI Primitives ---
 import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
@@ -36,23 +32,15 @@ import { MarkButton } from "@/components/tiptap-ui/mark-button";
 import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
 import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
 
-// --- Icons ---
-
 // --- Hooks ---
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowSize } from "@/hooks/use-window-size";
 
-// --- Components ---
-
-// --- Lib ---
-
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 import { useCustomEditor } from "@/contexts/useEditor";
 import { useKeyboardOffset } from "@/contexts/useKeyboardHeight";
-
-// import content from "@/components/tiptap-templates/simple/data/content.json";
 
 const MainToolbarContent = ({
 	onHighlighterClick,
@@ -65,65 +53,63 @@ const MainToolbarContent = ({
 }) => {
 	return (
 		<>
-			<>
-				<Spacer />
+			<Spacer />
 
-				<ToolbarGroup>
-					<UndoRedoButton action="undo" />
-					<UndoRedoButton action="redo" />
-				</ToolbarGroup>
+			<ToolbarGroup>
+				<UndoRedoButton action="undo" />
+				<UndoRedoButton action="redo" />
+			</ToolbarGroup>
 
-				<ToolbarSeparator />
+			<ToolbarSeparator />
 
-				<ToolbarGroup>
-					<HeadingDropdownMenu levels={[1, 2, 3, 4]} />
-					<ListDropdownMenu types={["bulletList", "orderedList", "taskList"]} />
-					<BlockQuoteButton />
-					<CodeBlockButton />
-				</ToolbarGroup>
+			<ToolbarGroup>
+				<HeadingDropdownMenu levels={[1, 2, 3, 4]} />
+				<ListDropdownMenu types={["bulletList", "orderedList", "taskList"]} />
+				<BlockQuoteButton />
+				<CodeBlockButton />
+			</ToolbarGroup>
 
-				<ToolbarSeparator />
+			<ToolbarSeparator />
 
-				<ToolbarGroup>
-					<MarkButton type="bold" />
-					<MarkButton type="italic" />
-					<MarkButton type="strike" />
-					<MarkButton type="code" />
-					<MarkButton type="underline" />
-					{!isMobile ? (
-						<ColorHighlightPopover />
-					) : (
-						<ColorHighlightPopoverButton onClick={onHighlighterClick} />
-					)}
-					{!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
-				</ToolbarGroup>
+			<ToolbarGroup>
+				<MarkButton type="bold" />
+				<MarkButton type="italic" />
+				<MarkButton type="strike" />
+				<MarkButton type="code" />
+				<MarkButton type="underline" />
+				{!isMobile ? (
+					<ColorHighlightPopover />
+				) : (
+					<ColorHighlightPopoverButton onClick={onHighlighterClick} />
+				)}
+				{!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+			</ToolbarGroup>
 
-				<ToolbarSeparator />
+			<ToolbarSeparator />
 
-				<ToolbarGroup>
-					<MarkButton type="superscript" />
-					<MarkButton type="subscript" />
-				</ToolbarGroup>
+			<ToolbarGroup>
+				<MarkButton type="superscript" />
+				<MarkButton type="subscript" />
+			</ToolbarGroup>
 
-				<ToolbarSeparator />
+			<ToolbarSeparator />
 
-				<ToolbarGroup>
-					<TextAlignButton align="left" />
-					<TextAlignButton align="center" />
-					<TextAlignButton align="right" />
-					<TextAlignButton align="justify" />
-				</ToolbarGroup>
+			<ToolbarGroup>
+				<TextAlignButton align="left" />
+				<TextAlignButton align="center" />
+				<TextAlignButton align="right" />
+				<TextAlignButton align="justify" />
+			</ToolbarGroup>
 
-				<ToolbarSeparator />
+			<ToolbarSeparator />
 
-				<ToolbarGroup>
-					<ImageUploadButton text="Add" />
-				</ToolbarGroup>
+			<ToolbarGroup>
+				<ImageUploadButton text="Add" />
+			</ToolbarGroup>
 
-				<Spacer />
+			<Spacer />
 
-				{isMobile && <ToolbarSeparator />}
-			</>
+			{isMobile && <ToolbarSeparator />}
 		</>
 	);
 };
