@@ -12,11 +12,13 @@ export default async function SignInPage({ params }: { params: Params }) {
 		<div className="w-full min-h-[100vh] flex justify-center items-center flex-col gap-5">
 			<h1
 				className={cn(
-					"font-bold text-2xl lg:text-3xl font-arc",
+					"font-bold text-2xl lg:text-3xl font-arc text-orange-600",
 					archivo.className
 				)}
 			>
-				Welcome to Blog Site
+				<span className="text-slate-700 dark:text-slate-200">The</span>
+				<span>Daily</span>
+				<span className="text-slate-700 dark:text-slate-200">Byte</span>
 			</h1>
 			<div className="gap-5 flex flex-col">
 				<Button

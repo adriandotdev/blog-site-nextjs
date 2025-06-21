@@ -22,14 +22,14 @@ const items = [
 		icon: Notebook,
 	},
 	{
-		title: "About",
-		url: "/blogs/about",
-		icon: InfoIcon,
-	},
-	{
 		title: "Drafts",
 		url: "/blogs/drafts",
 		icon: PencilIcon,
+	},
+	{
+		title: "About",
+		url: "/blogs/about",
+		icon: InfoIcon,
 	},
 ];
 
@@ -40,7 +40,10 @@ export function AppSidebar() {
 		<Sidebar>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel className="text-sm">Blog Site</SidebarGroupLabel>
+					<SidebarGroupLabel className="text-sm text-orange-600">
+						<span className="text-slate-700 dark:text-slate-200">The</span>Daily
+						<span className="text-slate-700 dark:text-slate-200">Byte</span>
+					</SidebarGroupLabel>
 					<SidebarGroupContent className="mt-2">
 						<SidebarMenu>
 							{items.map((item) => (
