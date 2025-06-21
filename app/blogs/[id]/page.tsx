@@ -13,7 +13,7 @@ export default async function BlogPage({ params }: { params: Params }) {
 
 	return (
 		<div className="mx-3 mt-3">
-			<div>
+			<div className="max-w-[640px] mx-auto my-0 px-6">
 				<Link href="/blogs">
 					<Button variant="ghost">
 						<ArrowLeftIcon />
