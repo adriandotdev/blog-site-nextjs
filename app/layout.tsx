@@ -6,6 +6,7 @@ import "./globals.css";
 import { EditorProvider } from "@/contexts/useEditor";
 import { lora, roboto } from "@/lib/fonts";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
 	title: "Blog Site",
@@ -29,6 +30,7 @@ export default function RootLayout({
 					<SessionProvider>
 						<EditorProvider>
 							<main className="w-full overflow-y-auto">{children}</main>
+							<Toaster />
 						</EditorProvider>
 					</SessionProvider>
 				</ThemeProvider>

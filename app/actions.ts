@@ -5,7 +5,7 @@ import { blogs, InsertBlogs, users } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 export async function getBlogs(email: string, status: string) {
 	console.log(email);
@@ -46,8 +46,6 @@ export async function publishBlog(
 		});
 
 	revalidatePath("/blogs");
-
-	redirect("/blogs");
 }
 
 export async function saveBlogAsDraft(
@@ -78,8 +76,6 @@ export async function saveBlogAsDraft(
 		});
 
 	revalidatePath("/blogs/drafts");
-
-	redirect("/blogs");
 }
 
 export async function getBlogById(id: number) {

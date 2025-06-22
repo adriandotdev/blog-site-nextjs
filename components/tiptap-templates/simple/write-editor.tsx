@@ -31,6 +31,8 @@ import { useCustomEditor } from "@/contexts/useEditor";
 import { SelectBlogs } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type SimpleEditorProps = {
 	isEditable: boolean;
@@ -44,6 +46,7 @@ export function WriteEditor({
 	draftBlog,
 }: SimpleEditorProps) {
 	const session = useSession();
+	const router = useRouter();
 
 	const {
 		title,
@@ -80,6 +83,8 @@ export function WriteEditor({
 				},
 				session.data?.user?.email as string
 			);
+			toast("Blog saved as draft successfully!", { duration: 1500 });
+			router.push("/blogs/drafts");
 		} catch (err) {
 			console.error("Error in saving blog as draft", err);
 		} finally {
@@ -89,6 +94,7 @@ export function WriteEditor({
 
 	const handlePublish = useCallback(async () => {
 		try {
+			console.log("try");
 			setPublishing(true);
 			await publishBlog(
 				{
@@ -99,6 +105,11 @@ export function WriteEditor({
 				},
 				session.data?.user?.email as string
 			);
+			toast("You've successfully published your blog!", { duration: 1500 });
+			router.push("/blogs");
+			// setTimeout(() => {
+			// 	router.push("/blogs");
+			// }, 1500);
 		} catch (err) {
 			console.error("Error in publishing a blog", err);
 		} finally {
