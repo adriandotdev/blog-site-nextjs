@@ -34,6 +34,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { useModalStore } from "@/stores/useModalStore";
+import { AlignLeft } from "lucide-react";
 type SimpleEditorProps = {
 	isEditable: boolean;
 	isViewing?: boolean;
@@ -47,7 +49,7 @@ export function WriteEditor({
 }: SimpleEditorProps) {
 	const session = useSession();
 	const router = useRouter();
-
+	const showModal = useModalStore((state) => state.showModal);
 	const {
 		title,
 		setTitle,
@@ -195,6 +197,9 @@ export function WriteEditor({
 							onClick={handlePublish}
 						>
 							{isPublishing ? "Publishing..." : "Publish"}
+						</ShadCnButton>
+						<ShadCnButton onClick={() => showModal("modal")}>
+							<AlignLeft />
 						</ShadCnButton>
 					</div>
 					{/* <Toolbar

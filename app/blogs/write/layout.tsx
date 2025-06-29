@@ -6,7 +6,6 @@ import * as React from "react";
 // --- UI Primitives ---
 import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
-	Toolbar,
 	ToolbarGroup,
 	ToolbarSeparator,
 } from "@/components/tiptap-ui-primitive/toolbar";
@@ -145,7 +144,7 @@ export default function BlogLayout({
 						<pre>{JSON.stringify(bodyRect, null, 2)}</pre>
 					</div>
 				)}
-				<Toolbar
+				{/* <Toolbar
 					ref={toolbarRef}
 					style={
 						isMobile
@@ -183,7 +182,7 @@ export default function BlogLayout({
 						onLinkClick={() => setMobileView("link")}
 						isMobile={isMobile}
 					/>
-				</Toolbar>
+				</Toolbar> */}
 				{children}
 			</div>
 		</EditorContext.Provider>

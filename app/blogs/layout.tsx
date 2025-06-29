@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import EditorToolModal from "@/components/editor-tool-modal";
 import { ModeToggle } from "@/components/theme-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -16,6 +17,7 @@ export default function BlogLayout({
 					<ModeToggle />
 				</div>
 				{children}
+				<EditorToolModal />
 			</div>
 		</SidebarProvider>
 	);
