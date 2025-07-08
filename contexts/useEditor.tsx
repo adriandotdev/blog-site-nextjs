@@ -177,7 +177,23 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
 				exitOnArrowDown: true,
 			}),
 			Placeholder.configure({
-				placeholder: "Write something…",
+				placeholder: ({ node }) => {
+					if (node.type.name === "heading") {
+						const level = node.attrs.level || 1;
+						return `Heading ${level}`;
+					}
+
+					if (node.type.name === "paragraph") {
+						return "Write something...";
+					}
+
+					if (node.type.name === "blockquote") {
+						return "Blockquote...";
+					}
+
+					// fallback
+					return "Write something...";
+				},
 			}),
 			Dropcursor,
 		],

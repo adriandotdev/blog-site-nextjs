@@ -11,7 +11,7 @@ import {
 	ListOrdered,
 } from "lucide-react";
 import { BlockQuoteIcon } from "./tiptap-icons/block-quote-icon";
-import { Button } from "./ui/button";
+import ToolbarButton from "./toolbar-button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Separator } from "./ui/separator";
 
@@ -20,6 +20,61 @@ export default function EditorToolModal() {
 	const hideModal = useModalStore((state) => state.hideModal);
 
 	const { editor } = useCustomEditor();
+
+	const basicBlocks = [
+		{
+			icon: Heading1,
+			label: "Heading 1",
+			shortcutCommand: "#",
+			toolbarEvent: () =>
+				editor?.chain().focus().toggleHeading({ level: 1 }).run(),
+		},
+		{
+			icon: Heading2,
+			label: "Heading 2",
+			shortcutCommand: "##",
+			toolbarEvent: () =>
+				editor?.chain().focus().toggleHeading({ level: 2 }).run(),
+		},
+		{
+			icon: Heading3,
+			label: "Heading 3",
+			shortcutCommand: "###",
+			toolbarEvent: () =>
+				editor?.chain().focus().toggleHeading({ level: 3 }).run(),
+		},
+		{
+			icon: Heading4,
+			label: "Heading 4",
+			shortcutCommand: "####",
+			toolbarEvent: () =>
+				editor?.chain().focus().toggleHeading({ level: 4 }).run(),
+		},
+		{
+			icon: List,
+			label: "Bulleted List",
+			shortcutCommand: "-",
+			toolbarEvent: () => editor?.chain().focus().toggleBulletList().run(),
+		},
+		{
+			icon: ListOrdered,
+			label: "Numbered List",
+			shortcutCommand: "1.",
+			toolbarEvent: () => editor?.chain().focus().toggleOrderedList().run(),
+		},
+		{
+			icon: ListChecks,
+			label: "To-do List",
+			shortcutCommand: "[]",
+			toolbarEvent: () => editor?.chain().focus().toggleTaskList().run(),
+		},
+		{
+			icon: BlockQuoteIcon,
+			label: "Blockquote",
+			shortcutCommand: ">",
+			toolbarEvent: () => editor?.chain().focus().toggleBlockquote().run(),
+		},
+	];
 
 	return (
 		<Dialog
@@ -34,94 +89,21 @@ export default function EditorToolModal() {
 				</DialogHeader>
 
 				<div className="flex flex-col gap-2">
-					<Button
-						variant="ghost"
-						className="w-full flex justify-between"
-						onClick={() =>
-							editor?.chain().focus().toggleHeading({ level: 1 }).run()
-						}
-					>
-						<div className="flex gap-2">
-							<Heading1 />
-							Heading 1
-						</div>
-						<span>#</span>
-					</Button>
-					<Button
-						variant="ghost"
-						className="w-full flex justify-between"
-						onClick={() =>
-							editor?.chain().focus().toggleHeading({ level: 2 }).run()
-						}
-					>
-						<div className="flex gap-2">
-							<Heading2 />
-							Heading 2
-						</div>
-						<span>##</span>
-					</Button>
-					<Button
-						variant="ghost"
-						className="w-full flex justify-between"
-						onClick={() =>
-							editor?.chain().focus().toggleHeading({ level: 3 }).run()
-						}
-					>
-						<div className="flex gap-2">
-							<Heading3 />
-							Heading 3
-						</div>
-						<span>###</span>
-					</Button>
-					<Button
-						variant="ghost"
-						className="w-full flex justify-between"
-						onClick={() =>
-							editor?.chain().focus().toggleHeading({ level: 4 }).run()
-						}
-					>
-						<div className="flex gap-2">
-							<Heading4 />
-							Heading 4
-						</div>
-						<span>####</span>
-					</Button>
+					{basicBlocks.map((block, index) => {
+						return (
+							<ToolbarButton
+								key={index}
+								icon={block.icon}
+								label={block.label}
+								shortcutCommand={block.shortcutCommand}
+								toolbarEvent={() => {
+									block.toolbarEvent();
+									hideModal();
+								}}
+							/>
+						);
+					})}
 
-					<Button
-						variant="ghost"
-						className="w-full flex justify-start"
-						onClick={() => editor?.chain().focus().toggleBulletList().run()}
-					>
-						<div></div>
-						<List />
-						Bulleted List
-					</Button>
-
-					<Button
-						variant="ghost"
-						className="w-full flex justify-start"
-						onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-					>
-						<ListOrdered />
-						Numbered List
-					</Button>
-					<Button
-						variant="ghost"
-						className="w-full flex justify-start"
-						onClick={() => editor?.chain().focus().toggleTaskList().run()}
-					>
-						<ListChecks />
-						To-do List
-					</Button>
-
-					<Button
-						variant="ghost"
-						className="w-full flex justify-start"
-						onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-					>
-						<BlockQuoteIcon />
-						Blockquote
-					</Button>
 					<Separator />
 				</div>
 			</DialogContent>
