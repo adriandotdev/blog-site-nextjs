@@ -178,21 +178,22 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
 			}),
 			Placeholder.configure({
 				placeholder: ({ node }) => {
-					if (node.type.name === "heading") {
-						const level = node.attrs.level || 1;
-						return `Heading ${level}`;
+					switch (node.type.name) {
+						case "heading":
+							return `Heading ${node.attrs.level}`;
+						case "paragraph":
+							return "Write something...";
+						case "blockquote":
+							return "Blockquote...";
+						case "bulletList":
+							return "List your ideas...";
+						case "orderedList":
+							return "Add steps or a sequence...";
+						case "taskList":
+							return "Add a task...";
+						default:
+							return "Write something...";
 					}
-
-					if (node.type.name === "paragraph") {
-						return "Write something...";
-					}
-
-					if (node.type.name === "blockquote") {
-						return "Blockquote...";
-					}
-
-					// fallback
-					return "Write something...";
 				},
 			}),
 			Dropcursor,
