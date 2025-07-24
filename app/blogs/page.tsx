@@ -19,7 +19,7 @@ export default async function BlogIndex() {
 				<h1 className="text-2xl lg:text-3xl font-lora font-semibold">
 					Welcome, {name}
 				</h1>
-				<Link href={"/blogs/write"}>
+				<Link key={"/blogs/write"} href={"/blogs/write"}>
 					<Button>
 						<PencilIcon />
 						Write
