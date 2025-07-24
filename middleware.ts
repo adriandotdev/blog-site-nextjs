@@ -1,16 +1,23 @@
 import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 
-const publicRoutes = ["/signin"];
+function isBlogDetailRoute(pathname: string) {
+	return /^\/blog\/[^/]+$/.test(pathname);
+}
 
 export default auth((req) => {
-	if (req.auth && publicRoutes.includes(req.nextUrl.pathname)) {
-		const newUrl = new URL("/blogs", req.nextUrl.origin);
-		return Response.redirect(newUrl);
+	const { pathname, origin } = req.nextUrl;
+
+	if (isBlogDetailRoute(pathname)) {
+		return NextResponse.next();
 	}
 
-	if (!req.auth && req.nextUrl.pathname !== "/signin") {
-		const newUrl = new URL("/signin", req.nextUrl.origin);
-		return Response.redirect(newUrl);
+	if (req.auth && pathname === "/signin") {
+		return NextResponse.redirect(new URL("/blogs", origin));
+	}
+
+	if (!req.auth && pathname.startsWith("/blogs")) {
+		return NextResponse.redirect(new URL("/signin", origin));
 	}
 });
 

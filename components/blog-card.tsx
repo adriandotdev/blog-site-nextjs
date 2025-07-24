@@ -10,11 +10,13 @@ import {
 } from "@/components/ui/card";
 import { SelectBlogs } from "@/db/schema";
 import { truncate } from "lodash";
-import { FileEditIcon, HeartIcon } from "lucide-react";
+import { CheckIcon, FileEditIcon, HeartIcon, Link2Icon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
+import { toast } from "sonner";
+
 export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 	const session = useSession();
 
@@ -24,6 +26,23 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 		if (blog.status === "draft") return `/blogs/write?draft=true&id=${blog.id}`;
 
 		return `/blogs/${blog.id}`;
+	};
+
+	const handleCopy = async () => {
+		const baseUrl = window.location.origin;
+		const fullUrl = `${baseUrl}/blog/${blog.id}`;
+
+		try {
+			await navigator.clipboard.writeText(fullUrl);
+			toast("Link copied to clipboard!", {
+				duration: 1500,
+				position: "top-center",
+				icon: <CheckIcon className="text-green-500" />,
+			});
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch (err) {
+			toast("Link copied to clipboard!", { duration: 1500 });
+		}
 	};
 
 	return (
@@ -92,6 +111,17 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 						</div>
 					</div>
 				)}
+
+				<div>
+					<Button
+						variant="ghost"
+						onClick={handleCopy}
+						className="ml-2"
+						size="icon"
+					>
+						<Link2Icon />
+					</Button>
+				</div>
 			</CardFooter>
 		</Card>
 	);
