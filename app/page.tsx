@@ -160,7 +160,7 @@ export default function Home() {
 			</div>
 
 			{/* Features Section */}
-			<div className="bg-slate-950 min-h-[56vh] py-24 px-16">
+			<div className="bg-slate-950 min-h-[56vh] py-24 px-12 lg:px-16">
 				<div className="flex flex-col justify-center items-center ">
 					<h1 className="font-archivo font-bold text-4xl lg:text-5xl text-center bg-gradient-to-r from-orange-600 via-red-500 to-orange-400 bg-clip-text text-transparent text-wrap break-words min-h-[4rem]">
 						All-in-One Platform to Write and Share Instantly
@@ -204,7 +204,7 @@ export default function Home() {
 			</div>
 
 			{/* Testimonals Section */}
-			<div className="flex flex-col items-center justify-center min-h-[80vh] gap-5 overflow-hidden px-4">
+			<div className="flex flex-col items-center justify-center min-h-[80vh] gap-5 overflow-hidden px-4 py-12">
 				<div>
 					<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl h-[6rem] md:h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words">
 						<span>Why They Love</span>
