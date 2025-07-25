@@ -217,9 +217,9 @@ export default function Home() {
 			</div>
 
 			{/* Testimonals Section */}
-			<div className="flex flex-col items-center justify-center min-h-[80vh] gap-5 overflow-hidden px-4 py-12">
+			<div className="flex flex-col items-center justify-center min-h-[80vh] gap-5 2xl:gap-10 overflow-hidden px-4 py-12">
 				<div>
-					<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl h-[6rem] md:h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words">
+					<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl h-[6rem] md:h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words 2xl:text-6xl">
 						<span>Why They Love</span>
 						<span>Our Platform</span>
 					</h1>
@@ -275,9 +275,9 @@ export default function Home() {
 			</div>
 
 			{/* FAQs */}
-			<div className="flex flex-col items-center justify-start min-h-[65vh] gap-5 overflow-hidden px-8 py-12 ">
+			<div className="flex flex-col items-center justify-start min-h-[65vh] gap-5 2xl:gap-10 overflow-hidden px-8 py-12 ">
 				<div>
-					<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl min-h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words">
+					<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl min-h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words 2xl:text-6xl">
 						<span>Frequently Asked Questions</span>
 					</h1>
 				</div>
@@ -325,10 +325,10 @@ export default function Home() {
 			<div>
 				<div className="bg-slate-950 min-h-[26vh] py-24 px-12 lg:px-16">
 					<div className="text-center">
-						<h2 className="text-4xl font-bold text-slate-100 text-">
+						<h2 className="text-4xl font-bold text-slate-100 2xl:text-5xl">
 							It’s Time to Share What Matters to You
 						</h2>
-						<p className="text-slate-300 mt-2">
+						<p className="text-slate-300 mt-2 2xl:text-xl">
 							Join thousands of writers using TheDailyBytes
 						</p>
 						<Button className="cursor-pointer mt-6 bg-gradient-to-l from-orange-800 via-red-600 to-orange-400 text-white font-bold">
