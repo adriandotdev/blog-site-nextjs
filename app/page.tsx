@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 
+import { ModeToggle } from "@/components/theme-toggle";
 import {
 	Accordion,
 	AccordionContent,
@@ -136,7 +137,7 @@ export default function Home() {
 				<div>
 					<h1>TheDailyBytes</h1>
 				</div>
-				<div>
+				<div className="flex flex-row gap-3">
 					<Button
 						onClick={() => {
 							router.push("/signin");
@@ -145,6 +146,7 @@ export default function Home() {
 					>
 						Try it for free
 					</Button>
+					<ModeToggle />
 				</div>
 			</div>
 			{/* Hero Section */}
@@ -153,7 +155,7 @@ export default function Home() {
 					Share Your Voice With the World
 				</h1>
 
-				<div className="flex font-semibold text-lg items-center gap-2 font-lora text-slate-800 lg:text-3xl">
+				<div className="flex font-semibold text-lg items-center gap-2 font-lora text-slate-800 lg:text-3xl dark:text-slate-100">
 					<span>Simple.</span>
 					<span>Free.</span>
 					<span>Instant.</span>
@@ -166,7 +168,10 @@ export default function Home() {
 						Start Writing
 					</Button>
 
-					<Button size="lg" className="hover:cursor-pointer">
+					<Button
+						size="lg"
+						className="hover:cursor-pointer dark:bg-gradient-to-r from-orange-600 via-red-500 to-orange-400 dark:text-slate-50 font-semibold"
+					>
 						Explore Blogs
 					</Button>
 				</div>
@@ -224,26 +229,26 @@ export default function Home() {
 						<span>Our Platform</span>
 					</h1>
 				</div>
-				<div className="relative w-full max-w-[740px]">
+				<div className="relative w-full max-w-[1182px]">
 					<div
 						className={cn(
-							"absolute top-[-2px] z-10 hidden h-[360px] w-[302px] bg-white blur-[50px] lg:block",
-							currentIndex === 0 ? "left-[-280px]" : "left-[-250px]"
+							"absolute top-[-150px] z-10 hidden h-[620px] w-[302px] bg-white dark:bg-[oklch(0.145_0_0)] blur-[50px] lg:block",
+							currentIndex === 0 ? "left-[-280px]" : "left-[-150px]"
 						)}
 					></div>
 					<div
 						className={cn(
-							"absolute top-[-2px] z-10 hidden h-[360px] w-[302px] bg-white blur-[50px] lg:block",
+							"absolute top-[-150px] z-10 hidden h-[620px] w-[302px] bg-white dark:bg-[oklch(0.145_0_0)] blur-[50px] lg:block",
 							currentIndex === dummyReviews.length - 1
 								? "right-[-280px]"
-								: "right-[-250px]"
+								: "right-[-150px]"
 						)}
 					></div>
 					<Carousel
 						plugins={[plugin.current]}
 						onMouseEnter={plugin.current.stop}
 						onMouseLeave={plugin.current.reset}
-						className="max-w-[750px] w-full rounded-lg"
+						className="w-full rounded-lg"
 						setApi={setApi}
 					>
 						<CarouselContent>
