@@ -3,6 +3,12 @@
 import { Button } from "@/components/ui/button";
 
 import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
 	Carousel,
 	CarouselApi,
 	CarouselContent,
@@ -12,6 +18,7 @@ import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import company from "../public/images/testimonials/company.jpg";
 import user1 from "../public/images/testimonials/user1.jpg";
@@ -26,6 +33,7 @@ type ReviewerProps = {
 };
 
 export default function Home() {
+	const router = useRouter();
 	const plugin = React.useRef(
 		Autoplay({ delay: 1500, stopOnInteraction: true })
 	);
@@ -129,7 +137,12 @@ export default function Home() {
 					<h1>TheDailyBytes</h1>
 				</div>
 				<div>
-					<Button className="hover:cursor-pointer bg-gradient-to-l from-orange-800  via-red-600  to-orange-400 text-white font-bold">
+					<Button
+						onClick={() => {
+							router.push("/signin");
+						}}
+						className="hover:cursor-pointer bg-gradient-to-l from-orange-800  via-red-600  to-orange-400 text-white font-bold"
+					>
 						Try it for free
 					</Button>
 				</div>
@@ -160,12 +173,12 @@ export default function Home() {
 			</div>
 
 			{/* Features Section */}
-			<div className="bg-slate-950 min-h-[56vh] py-24 px-12 lg:px-16">
-				<div className="flex flex-col justify-center items-center ">
+			<div className="bg-slate-950 min-h-[56vh] py-24 px-12 lg:px-16 flex flex-col justify-center items-center">
+				<div>
 					<h1 className="font-archivo font-bold text-4xl lg:text-5xl text-center bg-gradient-to-r from-orange-600 via-red-500 to-orange-400 bg-clip-text text-transparent text-wrap break-words min-h-[4rem]">
 						All-in-One Platform to Write and Share Instantly
 					</h1>
-					<div className="flex flex-row items-center gap-8 mt-16">
+					<div className="flex flex-col items-center lg:flex-row gap-8 mt-16 w-full">
 						<div className="flex flex-col gap-12 lg:gap-8 lg:flex-row">
 							{/* @TODO: Must be put to another component */}
 							<div className="max-w-[350px] flex flex-col gap-5">
@@ -258,6 +271,70 @@ export default function Home() {
 							))}
 						</div>
 					</Carousel>
+				</div>
+			</div>
+
+			{/* FAQs */}
+			<div className="flex flex-col items-center justify-start min-h-[65vh] gap-5 overflow-hidden px-8 py-12 ">
+				<div>
+					<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl min-h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words">
+						<span>Frequently Asked Questions</span>
+					</h1>
+				</div>
+				<Accordion type="single" collapsible className=" max-w-[730px] w-full">
+					<AccordionItem value="item-1">
+						<AccordionTrigger className="font-bold text-xl">
+							Is it free to use?
+						</AccordionTrigger>
+						<AccordionContent className="text-md">
+							Yes — our platform is completely free to use. You can write,
+							publish, and share your blogs without any cost.
+						</AccordionContent>
+					</AccordionItem>
+					<AccordionItem value="item-2">
+						<AccordionTrigger className="font-bold text-xl">
+							Do I need any technical or coding skills?
+						</AccordionTrigger>
+						<AccordionContent className="text-md">
+							Not at all. Our platform is designed to be beginner-friendly. If
+							you can type, you can blog.
+						</AccordionContent>
+					</AccordionItem>
+					<AccordionItem value="item-3">
+						<AccordionTrigger className="font-bold text-xl">
+							How do I share my blog posts?
+						</AccordionTrigger>
+						<AccordionContent className="text-md">
+							Each blog comes with a unique public link you can share on social
+							media, messaging apps, or anywhere online.
+						</AccordionContent>
+					</AccordionItem>
+					<AccordionItem value="item-4">
+						<AccordionTrigger className="font-bold text-xl">
+							Who can see my blogs?
+						</AccordionTrigger>
+						<AccordionContent className="text-md">
+							By default, your blogs are public via the share link. We are
+							working on adding privacy controls for private or unlisted posts
+							soon.
+						</AccordionContent>
+					</AccordionItem>
+				</Accordion>
+			</div>
+
+			<div>
+				<div className="bg-slate-950 min-h-[26vh] py-24 px-12 lg:px-16">
+					<div className="text-center">
+						<h2 className="text-4xl font-bold text-slate-100 text-">
+							It’s Time to Share What Matters to You
+						</h2>
+						<p className="text-slate-300 mt-2">
+							Join thousands of writers using TheDailyBytes
+						</p>
+						<Button className="cursor-pointer mt-6 bg-gradient-to-l from-orange-800 via-red-600 to-orange-400 text-white font-bold">
+							Start for Free
+						</Button>
+					</div>
 				</div>
 			</div>
 		</div>
