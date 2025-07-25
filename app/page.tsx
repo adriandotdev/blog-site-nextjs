@@ -280,7 +280,7 @@ export default function Home() {
 			</div>
 
 			{/* FAQs */}
-			<div className="flex flex-col items-center justify-start min-h-[65vh] gap-5 2xl:gap-10 overflow-hidden px-8 py-12 ">
+			<div className="flex flex-col items-center justify-center min-h-[65vh] gap-5 2xl:gap-10 overflow-hidden px-8 py-12 ">
 				<div>
 					<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl min-h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words 2xl:text-6xl">
 						<span>Frequently Asked Questions</span>
