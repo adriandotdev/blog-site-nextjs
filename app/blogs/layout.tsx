@@ -11,7 +11,7 @@ export default function BlogLayout({
 	return (
 		<SidebarProvider>
 			<AppSidebar />
-			<div className="w-full px-3 pt-3">
+			<div className="w-full px-3 pt-3 dark:bg-slate-950">
 				<div className="flex justify-between w-full px-3">
 					<SidebarTrigger />
 					<ModeToggle />

@@ -38,7 +38,7 @@ export function AppSidebar() {
 
 	return (
 		<Sidebar>
-			<SidebarContent>
+			<SidebarContent className="dark:bg-slate-900">
 				<SidebarGroup>
 					<SidebarGroupLabel className="text-sm text-orange-600">
 						<span className="text-slate-700 dark:text-slate-200">The</span>Daily
@@ -48,12 +48,15 @@ export function AppSidebar() {
 						<SidebarMenu>
 							{items.map((item) => (
 								<SidebarMenuItem key={item.title}>
-									<SidebarMenuButton asChild>
+									<SidebarMenuButton
+										asChild
+										className="hover:bg-slate-800 hover:text-white active:text-white active:bg-slate-800"
+									>
 										<Link
 											href={item.url}
 											className={clsx(
 												pathname === item.url &&
-													"bg-slate-900 text-white hover:bg-slate-900 hover:text-white"
+													"bg-slate-800 text-white hover:bg-slate-800 hover:text-white "
 											)}
 										>
 											<item.icon />

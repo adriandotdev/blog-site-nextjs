@@ -48,7 +48,7 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 	return (
 		<Card
 			key={blog.id}
-			className="w-full max-w-md min-h-[8rem] max-h-[18rem] flex flex-col justify-between"
+			className="w-full max-w-md min-h-[8rem] max-h-[18rem] flex flex-col justify-between dark:bg-slate-900 hover:border-[0.1px] hover:border-slate-50"
 		>
 			<Link href={redirectTo()}>
 				<CardHeader className="flex flex-col">
