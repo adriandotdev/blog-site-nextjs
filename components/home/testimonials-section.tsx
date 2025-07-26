@@ -61,10 +61,10 @@ const Reviewer = (props: ReviewerProps) => {
 				</div>
 			</div>
 			<div className="flex flex-col gap-1">
-				<p className="font-archivo-expanded text-[12px] md:text-[16px] lg:text-[20px] font-bold uppercase leading-normal text-black">
+				<p className="font-archivo-expanded text-[12px] md:text-[16px] lg:text-[20px] font-bold uppercase leading-normal text-black dark:text-slate-200">
 					{props.partner}
 				</p>
-				<p className="font-archivo text-[12px] font-normal leading-normal text-slate-900">
+				<p className="font-archivo text-[12px] font-normal leading-normal text-slate-900 dark:text-slate-50">
 					{props.client}
 				</p>
 			</div>
@@ -120,7 +120,7 @@ export default function TestimonialsSection() {
 	];
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-[80vh] gap-5 2xl:gap-10 overflow-hidden px-4 py-12">
+		<div className="flex flex-col items-center justify-center min-h-[80vh] gap-5 2xl:gap-10 overflow-hidden px-4 py-12 2xl:min-h-[60vh]">
 			<div>
 				<h1 className="flex flex-col md:flex-row gap-2 font-bold  text-4xl font-archivo lg:text-5xl h-[6rem] md:h-[4rem] bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent text-center text-wrap break-words 2xl:text-6xl">
 					<span>Why They Love</span>
@@ -153,12 +153,17 @@ export default function TestimonialsSection() {
 						{dummyReviews.map((review, index) => (
 							<CarouselItem
 								key={index}
-								className="max-w-[750px] w-full min-h-[300px]"
+								className={cn(
+									"max-w-[750px] w-full min-h-[300px] transition duration-300 ease-in-out m-0",
+									currentIndex === index
+										? "lg:transform lg:scale-105 lg:z-10"
+										: "lg:transform lg:scale-95 lg:opacity-60"
+								)}
 							>
-								<div className="p-1">
-									<div className="max-w-[740px] w-full rounded-[16px] bg-gradient-to-b  from-orange-50  via-red-200  to-orange-800 p-[1.5px] md:min-h-[304px]">
-										<div className="flex min-h-[340px] w-full select-none flex-col items-start justify-between gap-[40px] rounded-[16px] border bg-white p-[40px] backdrop-blur-0">
-											<p className="flex max-w-[660px] items-center font-archivo text-[16px] font-medium leading-[22.4px] text-black md:text-[24px] md:font-medium md:leading-[33.6px]">
+								<div className={cn("p-1")}>
+									<div className="max-w-[740px] w-full rounded-[16px] bg-gradient-to-b  from-orange-50  via-red-200  to-orange-800 p-[1.5px] md:min-h-[304px] transform scale-95">
+										<div className="flex min-h-[340px] w-full select-none flex-col items-start justify-between gap-[20px] rounded-[16px] border bg-white dark:bg-slate-950 p-[40px] backdrop-blur-0">
+											<p className="flex max-w-[660px] items-center font-archivo text-[16px] font-medium leading-[22.4px] text-black dark:text-slate-100 md:text-[24px] md:font-medium md:leading-[33.6px]">
 												{review.review}
 											</p>
 											<Reviewer {...(review as unknown as ReviewerProps)} />

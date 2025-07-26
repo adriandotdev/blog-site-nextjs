@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 export default function Footer() {
 	return (
 		<footer className="bg-slate-900 text-white py-12 px-6 md:px-24">
-			<div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-10 2xl:gap-1">
 				{/* Brand/Logo */}
 				<div>
 					<h2 className="text-2xl font-bold font-archivo">

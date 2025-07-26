@@ -12,7 +12,7 @@ export default auth((req) => {
 		return NextResponse.next();
 	}
 
-	if (req.auth && pathname === "/signin") {
+	if (req.auth && (pathname === "/signin" || pathname === "/")) {
 		return NextResponse.redirect(new URL("/blogs", origin));
 	}
 
