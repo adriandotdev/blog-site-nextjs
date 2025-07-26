@@ -17,6 +17,7 @@ export default function Navbar() {
 				</h1>
 			</div>
 			<div className="flex flex-row gap-3">
+				<ModeToggle />
 				<Button
 					onClick={() => {
 						router.push("/signin");
@@ -25,7 +26,6 @@ export default function Navbar() {
 				>
 					Try it for free
 				</Button>
-				<ModeToggle />
 			</div>
 		</div>
 	);
