@@ -8,7 +8,13 @@ export default function Navbar() {
 	return (
 		<div className="p-5 border-b flex justify-between lg:px-24 px-8 items-center">
 			<div>
-				<h1>TheDailyBytes</h1>
+				<h1 className="font-bold font-archivo">
+					The
+					<span className="bg-gradient-to-b from-orange-800  via-red-600  to-orange-400 bg-clip-text text-transparent">
+						Daily
+					</span>
+					Bytes
+				</h1>
 			</div>
 			<div className="flex flex-row gap-3">
 				<Button
