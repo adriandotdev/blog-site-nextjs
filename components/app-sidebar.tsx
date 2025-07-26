@@ -42,7 +42,7 @@ export function AppSidebar() {
 				<SidebarGroup>
 					<SidebarGroupLabel className="text-sm text-orange-600">
 						<span className="text-slate-700 dark:text-slate-200">The</span>Daily
-						<span className="text-slate-700 dark:text-slate-200">Byte</span>
+						<span className="text-slate-700 dark:text-slate-200">Bytes</span>
 					</SidebarGroupLabel>
 					<SidebarGroupContent className="mt-2">
 						<SidebarMenu>

@@ -9,13 +9,13 @@ import TestimonialsSection from "@/components/home/testimonials-section";
 
 export default function Home() {
 	return (
-		<div>
+		<>
 			<Navbar />
 			<HeroSection />
 			<FeaturesSection />
 			<TestimonialsSection />
 			<FrequentlyAskedQuestionsSection />
 			<CTASection />
-		</div>
+		</>
 	);
 }
