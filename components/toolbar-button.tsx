@@ -1,6 +1,5 @@
 import { LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
-import { Button } from "./ui/button";
 
 type ToolbarButtonProps = {
 	icon: ForwardRefExoticComponent<
@@ -11,20 +10,20 @@ type ToolbarButtonProps = {
 	toolbarEvent: () => void;
 };
 
+import { CommandItem } from "./ui/command";
 export default function ToolbarButton(props: ToolbarButtonProps) {
 	const { icon: Icon, label, shortcutCommand, toolbarEvent } = props;
 
 	return (
-		<Button
-			variant="ghost"
-			className="w-full flex justify-between"
-			onClick={toolbarEvent}
+		<CommandItem
+			className="w-full flex justify-between hover:bg-slate-900"
+			onSelect={toolbarEvent}
 		>
 			<div className="flex gap-2">
 				<Icon />
 				{label}
 			</div>
 			<span>{shortcutCommand}</span>
-		</Button>
+		</CommandItem>
 	);
 }
