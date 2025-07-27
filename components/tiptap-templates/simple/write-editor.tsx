@@ -1,7 +1,7 @@
 "use client";
 
 import { BubbleMenu, EditorContent } from "@tiptap/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // --- UI Primitives ---
 import {
@@ -35,7 +35,9 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { useModalStore } from "@/stores/useModalStore";
+import { debounce } from "lodash";
 import { AlignLeft } from "lucide-react";
+
 type SimpleEditorProps = {
 	isEditable: boolean;
 	isViewing?: boolean;
@@ -68,12 +70,43 @@ export function WriteEditor({
 	);
 
 	// States
-
 	const [isPublishing, setPublishing] = useState(false);
 	const [isSavingAsDraft, setSaveAsDraft] = useState(false);
 	const [hasInitializedDraft, setHasInitializedDraft] = useState(false);
 
-	const handleSavingAsDraft = useCallback(async () => {
+	// State for determining if draft has changed.
+	const [draftChanged, setDraftChanged] = useState(false);
+
+	// Timeout reference to have a timeout for showing the text "Saved" when modifying a draft.
+	const textDraftRef = useRef<NodeJS.Timeout>(null);
+
+	const handleSavingAsDraftOnInput = useCallback(async () => {
+		try {
+			if (textDraftRef.current) clearTimeout(textDraftRef.current);
+
+			setDraftChanged(true);
+			setSaveAsDraft(true);
+			await saveBlogAsDraft(
+				{
+					id: draftBlog?.id ?? undefined,
+					title,
+					description,
+					content,
+				},
+				session.data?.user?.email as string
+			);
+		} catch (err) {
+			console.error("Error in saving blog as draft", err);
+		} finally {
+			setSaveAsDraft(false);
+
+			textDraftRef.current = setTimeout(() => {
+				setDraftChanged(false);
+			}, 1500);
+		}
+	}, [content, description, session.data?.user?.email, title, draftBlog]);
+
+	const handleSavingAsDraftOnClick = useCallback(async () => {
 		try {
 			setSaveAsDraft(true);
 			await saveBlogAsDraft(
@@ -85,18 +118,25 @@ export function WriteEditor({
 				},
 				session.data?.user?.email as string
 			);
-			toast("Blog saved as draft successfully!", { duration: 1500 });
+
+			toast("You've successfully published your blog!", { duration: 1500 });
 			router.push("/blogs/drafts");
 		} catch (err) {
 			console.error("Error in saving blog as draft", err);
 		} finally {
 			setSaveAsDraft(false);
 		}
-	}, [content, description, session.data?.user?.email, title, draftBlog]);
+	}, [
+		content,
+		description,
+		draftBlog,
+		router,
+		session.data?.user?.email,
+		title,
+	]);
 
 	const handlePublish = useCallback(async () => {
 		try {
-			console.log("try");
 			setPublishing(true);
 			await publishBlog(
 				{
@@ -109,9 +149,6 @@ export function WriteEditor({
 			);
 			toast("You've successfully published your blog!", { duration: 1500 });
 			router.push("/blogs");
-			// setTimeout(() => {
-			// 	router.push("/blogs");
-			// }, 1500);
 		} catch (err) {
 			console.error("Error in publishing a blog", err);
 		} finally {
@@ -179,50 +216,45 @@ export function WriteEditor({
 		titleEditor?.commands,
 	]);
 
+	const saveDraftOnInput = useMemo(
+		() => debounce(handleSavingAsDraftOnInput, 500),
+		[handleSavingAsDraftOnInput]
+	);
+
+	useEffect(() => {
+		return () => saveDraftOnInput.cancel();
+	}, [saveDraftOnInput]);
+
 	return (
 		<>
 			{!isViewing && (
-				<div>
-					<div className="flex gap-2 justify-end mt-3">
+				<div
+					className={"flex flex-row items-center mt-3 px-5 justify-end gap-2"}
+				>
+					{draftBlog && (
+						<span className="font-medium text-[0.9rem] text-green-800 mr-5">
+							{draftChanged ? "Saved" : ""}
+						</span>
+					)}
+					{!draftBlog && (
 						<ShadCnButton
 							className="disabled:cursor-not-allowed"
 							disabled={shouldDisable()}
-							onClick={handleSavingAsDraft}
+							onClick={handleSavingAsDraftOnClick}
 						>
 							{isSavingAsDraft ? "Saving..." : "Save as draft"}
 						</ShadCnButton>
-						<ShadCnButton
-							className="disabled:cursor-not-allowed"
-							disabled={shouldDisable()}
-							onClick={handlePublish}
-						>
-							{isPublishing ? "Publishing..." : "Publish"}
-						</ShadCnButton>
-						<ShadCnButton onClick={() => showModal("modal")}>
-							<AlignLeft />
-						</ShadCnButton>
-					</div>
-					{/* <Toolbar
-						ref={toolbarRef}
-						style={
-							isMobile
-								? {
-										bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-										overflow: "auto",
-								  }
-								: {}
-						}
-						className="overflow-x-auto mt-3 "
-						variant={`${isMobile ? "floating" : "fixed"}`}
+					)}
+					<ShadCnButton
+						className="disabled:cursor-not-allowed"
+						disabled={shouldDisable()}
+						onClick={handlePublish}
 					>
-						<MainToolbarContent
-							onHighlighterClick={() => setMobileView("highlighter")}
-							onLinkClick={() => setMobileView("link")}
-							isMobile={isMobile}
-							isEditable={isEditable}
-							isViewing={isViewing as boolean}
-						/>
-					</Toolbar> */}
+						{isPublishing ? "Publishing..." : "Publish"}
+					</ShadCnButton>
+					<ShadCnButton variant="ghost" onClick={() => showModal("modal")}>
+						<AlignLeft />
+					</ShadCnButton>
 				</div>
 			)}
 
@@ -252,16 +284,6 @@ export function WriteEditor({
 								<MarkButton type="strike" />
 								<MarkButton type="code" />
 								<MarkButton type="underline" />
-								{/* {!isMobile ? (
-                                    <ColorHighlightPopover />
-                                ) : (
-                                    <ColorHighlightPopoverButton onClick={onHighlighterClick} />
-                                )}
-                                {!isMobile ? (
-                                    <LinkPopover />
-                                ) : (
-                                    <LinkButton onClick={onLinkClick} />
-                                )} */}
 							</ToolbarGroup>
 							<ToolbarSeparator />
 							<ToolbarGroup>
@@ -283,6 +305,9 @@ export function WriteEditor({
 					editor={editor}
 					role="presentation"
 					className="simple-editor-content"
+					onInput={() => {
+						if (draftBlog) saveDraftOnInput();
+					}}
 				/>
 			</div>
 		</>

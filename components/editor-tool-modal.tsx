@@ -1,4 +1,12 @@
 "use client";
+import {
+	CommandDialog,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandList,
+	CommandSeparator,
+} from "@/components/ui/command";
 import { useCustomEditor } from "@/contexts/useEditor";
 import { useModalStore } from "@/stores/useModalStore";
 import {
@@ -12,8 +20,6 @@ import {
 } from "lucide-react";
 import { BlockQuoteIcon } from "./tiptap-icons/block-quote-icon";
 import ToolbarButton from "./toolbar-button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Separator } from "./ui/separator";
 
 export default function EditorToolModal() {
 	const name = useModalStore((state) => state.name);
@@ -77,18 +83,17 @@ export default function EditorToolModal() {
 	];
 
 	return (
-		<Dialog
+		<CommandDialog
+			className="dark:bg-slate-900"
 			open={name !== "hidden"}
 			onOpenChange={() => {
 				if (name !== "hidden") hideModal();
 			}}
 		>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Tools</DialogTitle>
-				</DialogHeader>
-
-				<div className="flex flex-col gap-2">
+			<CommandInput placeholder="Type a command or search..." />
+			<CommandList className="dark:bg-slate-900">
+				<CommandEmpty>No results found.</CommandEmpty>
+				<CommandGroup heading="Basic Blocks">
 					{basicBlocks.map((block, index) => {
 						return (
 							<ToolbarButton
@@ -103,10 +108,9 @@ export default function EditorToolModal() {
 							/>
 						);
 					})}
-
-					<Separator />
-				</div>
-			</DialogContent>
-		</Dialog>
+				</CommandGroup>
+				<CommandSeparator />
+			</CommandList>
+		</CommandDialog>
 	);
 }
