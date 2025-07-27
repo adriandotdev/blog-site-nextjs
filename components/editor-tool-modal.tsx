@@ -18,12 +18,14 @@ import {
 	ListChecks,
 	ListOrdered,
 } from "lucide-react";
+import { useEffect } from "react";
 import { BlockQuoteIcon } from "./tiptap-icons/block-quote-icon";
 import ToolbarButton from "./toolbar-button";
 
 export default function EditorToolModal() {
 	const name = useModalStore((state) => state.name);
 	const hideModal = useModalStore((state) => state.hideModal);
+	const showModal = useModalStore((state) => state.showModal);
 
 	const { editor } = useCustomEditor();
 
@@ -82,6 +84,19 @@ export default function EditorToolModal() {
 		},
 	];
 
+	useEffect(() => {
+		const onKeyPress = (e: KeyboardEvent) => {
+			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				showModal("modal");
+			}
+		};
+
+		document.addEventListener("keydown", onKeyPress);
+
+		return () => document.removeEventListener("keydown", onKeyPress);
+	}, []);
+
 	return (
 		<CommandDialog
 			className="dark:bg-slate-900"
@@ -90,7 +105,7 @@ export default function EditorToolModal() {
 				if (name !== "hidden") hideModal();
 			}}
 		>
-			<CommandInput placeholder="Type a command or search..." />
+			<CommandInput placeholder="Search a block..." />
 			<CommandList className="dark:bg-slate-900">
 				<CommandEmpty>No results found.</CommandEmpty>
 				<CommandGroup heading="Basic Blocks">
