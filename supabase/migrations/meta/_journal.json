@@ -15,6 +15,13 @@
       "when": 1749639673628,
       "tag": "0001_cool_ser_duncan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753628771545,
+      "tag": "0002_known_sabra",
+      "breakpoints": true
     }
   ]
 }

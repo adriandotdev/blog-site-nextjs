@@ -1,4 +1,13 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+	integer,
+	pgEnum,
+	pgTable,
+	serial,
+	text,
+	timestamp,
+} from "drizzle-orm/pg-core";
+
+export const visibilityEnum = pgEnum("visibility", ["public", "private"]);
 
 export const users = pgTable("users", {
 	id: serial("id").primaryKey(),
@@ -21,6 +30,7 @@ export const blogs = pgTable("blogs", {
 		.defaultNow()
 		.notNull()
 		.$onUpdate(() => new Date()),
+	visibility: visibilityEnum("visibility").default("public"),
 });
 
 export type InsertUser = typeof users.$inferInsert;
