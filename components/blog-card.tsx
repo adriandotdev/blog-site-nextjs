@@ -1,4 +1,5 @@
 "use client";
+import { deleteBlogById } from "@/app/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +10,15 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { SelectBlogs } from "@/db/schema";
+import { useModalStore } from "@/stores/useModalStore";
 import { truncate } from "lodash";
-import { CheckIcon, FileEditIcon, HeartIcon, Link2Icon } from "lucide-react";
+import {
+	CheckIcon,
+	FileEditIcon,
+	HeartIcon,
+	Link2Icon,
+	Trash2Icon,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +26,8 @@ import sanitizeHtml from "sanitize-html";
 import { toast } from "sonner";
 
 export default function BlogCard({ blog }: { blog: SelectBlogs }) {
+	const { showModal, hideModal } = useModalStore();
+
 	const session = useSession();
 
 	if (!session.data?.user) return;
@@ -45,6 +55,10 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 		}
 	};
 
+	const deleteBlog = async (id: number) => {
+		hideModal();
+		await deleteBlogById(id);
+	};
 	return (
 		<Card
 			key={blog.id}
@@ -120,6 +134,22 @@ export default function BlogCard({ blog }: { blog: SelectBlogs }) {
 						size="icon"
 					>
 						<Link2Icon />
+					</Button>
+
+					<Button
+						variant="ghost"
+						onClick={() => {
+							showModal("confirmation-modal", {
+								title: "Are you sure you want to delete this blog?",
+								description: "This can't be undone.",
+								cta: "Confirm",
+								onPressCTA: () => deleteBlog(blog.id),
+							});
+						}}
+						className="ml-2"
+						size="icon"
+					>
+						<Trash2Icon />
 					</Button>
 				</div>
 			</CardFooter>

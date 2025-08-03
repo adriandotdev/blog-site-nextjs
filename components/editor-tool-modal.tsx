@@ -88,7 +88,7 @@ export default function EditorToolModal() {
 		const onKeyPress = (e: KeyboardEvent) => {
 			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
-				showModal("modal");
+				showModal("block-modal");
 			}
 		};
 
@@ -100,7 +100,7 @@ export default function EditorToolModal() {
 	return (
 		<CommandDialog
 			className="dark:bg-slate-900"
-			open={name !== "hidden"}
+			open={name === "block-modal"}
 			onOpenChange={() => {
 				if (name !== "hidden") hideModal();
 			}}

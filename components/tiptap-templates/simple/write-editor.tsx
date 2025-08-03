@@ -252,7 +252,10 @@ export function WriteEditor({
 					>
 						{isPublishing ? "Publishing..." : "Publish"}
 					</ShadCnButton>
-					<ShadCnButton variant="ghost" onClick={() => showModal("modal")}>
+					<ShadCnButton
+						variant="ghost"
+						onClick={() => showModal("block-modal")}
+					>
 						<AlignLeft />
 					</ShadCnButton>
 				</div>

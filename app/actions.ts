@@ -102,3 +102,8 @@ export async function insertNewUser(user: User) {
 		password: "",
 	});
 }
+
+export async function deleteBlogById(id: number) {
+	await db.delete(blogs).where(eq(blogs.id, id));
+	revalidatePath("/blogs/drafts");
+}
