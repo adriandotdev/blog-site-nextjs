@@ -6,7 +6,7 @@ export default function Navbar() {
 	const router = useRouter();
 
 	return (
-		<div className="p-5 border-b flex justify-between lg:px-24 px-8 items-center">
+		<div className="py-5 border-b flex justify-between lg:px-24 items-center xl:px-24">
 			<div>
 				<h1 className="font-bold font-archivo">
 					The
