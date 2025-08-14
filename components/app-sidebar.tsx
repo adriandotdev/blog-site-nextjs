@@ -11,11 +11,16 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import clsx from "clsx";
-import { InfoIcon, Notebook, PencilIcon } from "lucide-react";
+import { InfoIcon, Notebook, PencilIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const items = [
+	{
+		title: "Write",
+		url: "/blogs/write",
+		icon: PlusIcon,
+	},
 	{
 		title: "My Blogs",
 		url: "/blogs",
