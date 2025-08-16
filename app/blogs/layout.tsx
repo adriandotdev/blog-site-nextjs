@@ -13,13 +13,13 @@ export default function BlogLayout({
 		<SidebarProvider>
 			<AppSidebar />
 			<div className="w-full px-3 pt-3 dark:bg-slate-950">
-				<div className="flex justify-between w-full px-3">
+				<div key="menu-container" className="flex justify-between w-full px-3">
 					<SidebarTrigger />
 					<ModeToggle />
 				</div>
 				{children}
-				<EditorToolModal />
-				<DialogModal />
+				<EditorToolModal key="editor-tool-modal" />
+				<DialogModal key="dialog-modal" />
 			</div>
 		</SidebarProvider>
 	);
