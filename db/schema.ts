@@ -1,5 +1,6 @@
 import {
 	integer,
+	jsonb,
 	pgEnum,
 	pgTable,
 	serial,
@@ -31,6 +32,7 @@ export const blogs = pgTable("blogs", {
 		.notNull()
 		.$onUpdate(() => new Date()),
 	visibility: visibilityEnum("visibility").default("public"),
+	metadata: jsonb(),
 });
 
 export type InsertUser = typeof users.$inferInsert;

@@ -22,6 +22,27 @@
       "when": 1753628771545,
       "tag": "0002_known_sabra",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1755360542554,
+      "tag": "0003_next_midnight",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1755360570172,
+      "tag": "0004_curly_siren",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1755360896917,
+      "tag": "0005_public_nebula",
+      "breakpoints": true
     }
   ]
 }
