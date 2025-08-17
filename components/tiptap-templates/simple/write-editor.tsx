@@ -25,7 +25,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
-import { publishBlog, saveBlogAsDraft } from "@/app/actions";
+import { saveBlogAsDraft } from "@/app/actions";
 import { Button as ShadCnButton } from "@/components/ui/button";
 import { useCustomEditor } from "@/contexts/useEditor";
 import { SelectBlogs } from "@/db/schema";
@@ -35,9 +35,9 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { useModalStore } from "@/stores/useModalStore";
+import { useSheetComponentStore } from "@/stores/useSheetComponentStore";
 import { debounce } from "lodash";
 import { AlignLeft } from "lucide-react";
-import sanitizeHtml from "sanitize-html";
 
 type SimpleEditorProps = {
 	isEditable: boolean;
@@ -52,9 +52,8 @@ export function WriteEditor({
 }: SimpleEditorProps) {
 	const session = useSession();
 	const router = useRouter();
-	const showModal = useModalStore((state) => state.showModal);
-	const hideModal = useModalStore((state) => state.hideModal);
-
+	const { showModal } = useModalStore();
+	const { showSheetComponent } = useSheetComponentStore();
 	const {
 		title,
 		setTitle,
@@ -140,29 +139,37 @@ export function WriteEditor({
 
 	const handlePublish = useCallback(async () => {
 		try {
-			showModal("confirmation-modal", {
-				title: "Are you sure you want to publish this blog?",
-				description: sanitizeHtml(title, {
-					allowedTags: [],
-					allowedAttributes: {},
-				}),
-				cta: "Publish",
-				onPressCTA: async () => {
-					hideModal();
-					setPublishing(true);
-					await publishBlog(
-						{
-							id: draftBlog?.id ?? undefined,
-							title,
-							description,
-							content,
-						},
-						session.data?.user?.email as string
-					);
-					toast("You've successfully published your blog!", { duration: 1500 });
-					router.push("/blogs");
-				},
+			showSheetComponent("publish-sheet", {
+				id: draftBlog?.id ?? undefined,
+				title,
+				description,
+				content,
+				email: session.data?.user?.email ?? "",
 			});
+
+			// showModal("confirmation-modal", {
+			// 	title: "Are you sure you want to publish this blog?",
+			// 	description: sanitizeHtml(title, {
+			// 		allowedTags: [],
+			// 		allowedAttributes: {},
+			// 	}),
+			// 	cta: "Publish",
+			// 	onPressCTA: async () => {
+			// 		hideModal();
+			// 		setPublishing(true);
+			// 		await publishBlog(
+			// 			{
+			// 				id: draftBlog?.id ?? undefined,
+			// 				title,
+			// 				description,
+			// 				content,
+			// 			},
+			// 			session.data?.user?.email as string
+			// 		);
+			// 		toast("You've successfully published your blog!", { duration: 1500 });
+			// 		router.push("/blogs");
+			// 	},
+			// });
 		} catch (err) {
 			console.error("Error in publishing a blog", err);
 		} finally {

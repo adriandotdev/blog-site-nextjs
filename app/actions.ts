@@ -2,18 +2,18 @@
 
 import { db } from "@/db";
 import { blogs, InsertBlogs, users } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 
 export async function getBlogs(email: string, status: string) {
-	console.log(email);
 	const userBlogs = await db
 		.select()
 		.from(blogs)
 		.leftJoin(users, eq(blogs.userId, users.id))
-		.where(and(eq(users.email, email), eq(blogs.status, status)));
+		.where(and(eq(users.email, email), eq(blogs.status, status)))
+		.orderBy(desc(blogs.createdAt));
 
 	return userBlogs;
 }
@@ -24,6 +24,7 @@ export async function publishBlog(
 ) {
 	const [user] = await db.select().from(users).where(eq(users.email, email));
 
+	console.log(blog);
 	await db
 		.insert(blogs)
 		.values({
@@ -33,6 +34,7 @@ export async function publishBlog(
 			description: blog.description,
 			userId: user.id,
 			status: "published",
+			metadata: blog.metadata,
 		})
 		.onConflictDoUpdate({
 			target: blogs.id,
@@ -41,6 +43,7 @@ export async function publishBlog(
 				content: blog.content,
 				description: blog.description,
 				status: "published",
+				metadata: blog.metadata,
 				updatedAt: new Date(),
 			},
 		});
