@@ -1,4 +1,3 @@
-import { getBlogById } from "@/app/actions";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
@@ -6,6 +5,7 @@ import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
 type Params = Promise<{ id: string }>;
 
+import { SelectBlogs } from "@/db/schema";
 import type { Metadata } from "next";
 
 type GenerateMetadataProps = {
@@ -22,7 +22,9 @@ export async function generateMetadata({
 }: GenerateMetadataProps): Promise<Metadata> {
 	const { id } = await params;
 
-	const blog = await getBlogById(+id);
+	const response = await fetch(`${process.env.API_URL}/api/blogs/${id}`);
+
+	const blog = (await response.json()) as SelectBlogs;
 
 	const keywords = (blog.metadata as BlogMetadata | undefined)?.tags ?? [];
 
@@ -52,7 +54,9 @@ export async function generateMetadata({
 export default async function BlogPage({ params }: { params: Params }) {
 	const { id } = await params;
 
-	const blog = await getBlogById(+id);
+	const response = await fetch(`${process.env.API_URL}/api/blogs/${id}`);
+
+	const blog = (await response.json()) as SelectBlogs;
 
 	return (
 		<div className="mx-3 mt-3">

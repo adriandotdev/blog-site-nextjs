@@ -2,21 +2,9 @@
 
 import { db } from "@/db";
 import { blogs, InsertBlogs, users } from "@/db/schema";
-import { and, desc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
-import { notFound } from "next/navigation";
-
-export async function getBlogs(email: string, status: string) {
-	const userBlogs = await db
-		.select()
-		.from(blogs)
-		.leftJoin(users, eq(blogs.userId, users.id))
-		.where(and(eq(users.email, email), eq(blogs.status, status)))
-		.orderBy(desc(blogs.createdAt));
-
-	return userBlogs;
-}
 
 export async function publishBlog(
 	blog: Omit<InsertBlogs, "userId">,
@@ -78,14 +66,6 @@ export async function saveBlogAsDraft(
 		});
 
 	revalidatePath("/blogs/drafts");
-}
-
-export async function getBlogById(id: number) {
-	const blog = await db.select().from(blogs).where(eq(blogs.id, id));
-
-	if (blog.length === 0) notFound();
-
-	return blog[0];
 }
 
 export async function existingUser(email: string) {
