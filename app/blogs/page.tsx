@@ -12,7 +12,7 @@ type User = {
 	name: string;
 } | null;
 
-interface BlogsResponse {
+export interface BlogsResponse {
 	blogs: SelectBlogs;
 	user: User;
 }

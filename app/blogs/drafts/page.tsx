@@ -1,11 +1,14 @@
-import { getBlogs } from "@/app/actions";
 import { auth } from "@/auth";
 import BlogCard from "@/components/blog-card";
+import { BlogsResponse } from "../page";
 
 export default async function DraftsPage() {
 	const session = await auth();
 
-	const data = await getBlogs(session?.user?.email as string, "draft");
+	const response = await fetch(
+		`http://localhost:3000/api/blogs?email=${session?.user?.email}&status=draft`
+	);
+	const data: BlogsResponse[] = await response.json();
 
 	return (
 		<div className="max-w-[100vw] py-3 px-3">
