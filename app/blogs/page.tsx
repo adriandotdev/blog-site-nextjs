@@ -2,16 +2,30 @@ import { Button } from "@/components/ui/button";
 
 import { auth } from "@/auth";
 import BlogCard from "@/components/blog-card";
+import { SelectBlogs } from "@/db/schema";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
-import { getBlogs } from "../actions";
+
+type User = {
+	id: string;
+	email: string;
+	name: string;
+} | null;
+
+interface BlogsResponse {
+	blogs: SelectBlogs;
+	user: User;
+}
 
 export default async function BlogIndex() {
 	const session = await auth();
 
 	const userEmail = session?.user?.email;
 	const name = session?.user?.name;
-	const data = await getBlogs(userEmail as string, "published");
+	const response = await fetch(
+		`http://localhost:3000/api/blogs?email=${userEmail}&status=published`
+	);
+	const data: BlogsResponse[] = await response.json();
 
 	return (
 		<div className="max-w-[100vw] py-3 px-3">

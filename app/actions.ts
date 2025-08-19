@@ -24,7 +24,6 @@ export async function publishBlog(
 ) {
 	const [user] = await db.select().from(users).where(eq(users.email, email));
 
-	console.log(blog);
 	await db
 		.insert(blogs)
 		.values({
