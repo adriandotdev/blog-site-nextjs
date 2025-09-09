@@ -35,8 +35,23 @@ export const blogs = pgTable("blogs", {
 	metadata: jsonb(),
 });
 
+export const blogLikes = pgTable("blog_likes", {
+	id: serial("id").primaryKey(),
+	userId: integer("user_id")
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	blogId: integer("blog_id")
+		.notNull()
+		.references(() => blogs.id, { onDelete: "cascade" }),
+	createdAt: timestamp("created_at").defaultNow(),
+});
+
 export type InsertUser = typeof users.$inferInsert;
 export type SelectUser = typeof users.$inferSelect;
 
 export type InsertBlogs = typeof blogs.$inferInsert;
 export type SelectBlogs = typeof blogs.$inferSelect;
+
+export type BlogWithUser = SelectBlogs & {
+	user: SelectUser;
+};
