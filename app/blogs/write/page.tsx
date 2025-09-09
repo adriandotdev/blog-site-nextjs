@@ -1,5 +1,5 @@
-import { getBlogById } from "@/app/actions";
 import { WriteEditor } from "@/components/tiptap-templates/simple/write-editor";
+import { SelectBlogs } from "@/db/schema";
 
 export default async function Page({
 	searchParams,
@@ -10,7 +10,13 @@ export default async function Page({
 
 	let blog = undefined;
 
-	if (search.id) blog = await getBlogById(+search.id);
+	if (search.id) {
+		const response = await fetch(
+			`${process.env.API_URL}/api/blogs/${search.id}`
+		);
+
+		blog = (await response.json()) as SelectBlogs;
+	}
 
 	return (
 		<div className="overflow-auto">
