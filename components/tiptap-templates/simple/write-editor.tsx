@@ -146,30 +146,6 @@ export function WriteEditor({
 				content,
 				email: session.data?.user?.email ?? "",
 			});
-
-			// showModal("confirmation-modal", {
-			// 	title: "Are you sure you want to publish this blog?",
-			// 	description: sanitizeHtml(title, {
-			// 		allowedTags: [],
-			// 		allowedAttributes: {},
-			// 	}),
-			// 	cta: "Publish",
-			// 	onPressCTA: async () => {
-			// 		hideModal();
-			// 		setPublishing(true);
-			// 		await publishBlog(
-			// 			{
-			// 				id: draftBlog?.id ?? undefined,
-			// 				title,
-			// 				description,
-			// 				content,
-			// 			},
-			// 			session.data?.user?.email as string
-			// 		);
-			// 		toast("You've successfully published your blog!", { duration: 1500 });
-			// 		router.push("/blogs");
-			// 	},
-			// });
 		} catch (err) {
 			console.error("Error in publishing a blog", err);
 		} finally {
@@ -181,19 +157,23 @@ export function WriteEditor({
 		titleEditor?.isEmpty || editor?.isEmpty || !isEditable;
 
 	useEffect(() => {
-		setContent("");
-		setTitle("");
-		setDescription("");
+		if (!titleEditor || !descriptionEditor || !editor) return;
 
-		if (
-			titleEditor?.commands &&
-			descriptionEditor?.commands &&
-			editor?.commands
-		) {
-			titleEditor.commands.setContent("");
-			descriptionEditor.commands.setContent("");
-			editor.commands.setContent("");
-		}
+		queueMicrotask(() => {
+			setContent("");
+			setTitle("");
+			setDescription("");
+
+			if (
+				titleEditor?.commands &&
+				descriptionEditor?.commands &&
+				editor?.commands
+			) {
+				titleEditor.commands.setContent("");
+				descriptionEditor.commands.setContent("");
+				editor.commands.setContent("");
+			}
+		});
 	}, []);
 
 	useEffect(() => {
@@ -203,39 +183,27 @@ export function WriteEditor({
 	}, [isMobile, mobileView]);
 
 	useEffect(() => {
-		const canInitialize =
-			draftBlog &&
-			!hasInitializedDraft &&
-			titleEditor?.commands &&
-			descriptionEditor?.commands &&
-			editor?.commands;
+		if (
+			!draftBlog ||
+			hasInitializedDraft ||
+			!titleEditor ||
+			!descriptionEditor ||
+			!editor
+		)
+			return;
 
-		if (canInitialize) {
+		queueMicrotask(() => {
 			setTitle(draftBlog.title);
 			setDescription(draftBlog.description ?? "");
 			setContent(draftBlog.content);
 
-			if (
-				titleEditor?.commands &&
-				descriptionEditor?.commands &&
-				editor?.commands
-			) {
-				titleEditor.commands.setContent(draftBlog.title ?? "");
-				descriptionEditor.commands.setContent(draftBlog.description ?? "");
-				editor.commands.setContent(draftBlog.content ?? "");
-			}
+			titleEditor.commands.setContent(draftBlog.title ?? "");
+			descriptionEditor.commands.setContent(draftBlog.description ?? "");
+			editor.commands.setContent(draftBlog.content ?? "");
+
 			setHasInitializedDraft(true);
-		}
-	}, [
-		descriptionEditor?.commands,
-		draftBlog,
-		editor?.commands,
-		hasInitializedDraft,
-		setContent,
-		setDescription,
-		setTitle,
-		titleEditor?.commands,
-	]);
+		});
+	}, [draftBlog, hasInitializedDraft, titleEditor, descriptionEditor, editor]);
 
 	const saveDraftOnInput = useMemo(
 		() => debounce(handleSavingAsDraftOnInput, 500),

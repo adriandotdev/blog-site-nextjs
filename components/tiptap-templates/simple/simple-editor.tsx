@@ -45,15 +45,17 @@ import "@/components/tiptap-templates/simple/simple-editor.scss";
 
 import Placeholder from "@tiptap/extension-placeholder";
 
+import { likeBlogById } from "@/app/actions";
 import CodeBlockComponent from "@/components/custom-tiptap/CodeBlock";
 import { Separator } from "@/components/tiptap-ui-primitive/separator";
-import { SelectBlogs } from "@/db/schema";
+import { BlogWithUser } from "@/db/schema";
 import { cn, estimateReadTimeFromHTML } from "@/lib/utils";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Document } from "@tiptap/extension-document";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import { isNil } from "lodash";
 import { all, createLowlight } from "lowlight";
+import { HeartIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 const lowlight = createLowlight(all);
@@ -61,7 +63,12 @@ const lowlight = createLowlight(all);
 type SimpleEditorProps = {
 	isEditable: boolean;
 	isViewing?: boolean;
-	blog: SelectBlogs;
+	blog: BlogWithUser;
+};
+
+type BlogLikeType = {
+	userId: number;
+	blogId: number;
 };
 
 export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
@@ -71,6 +78,7 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 	const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
 		"main"
 	);
+	const [isLiked, setLiked] = useState(false);
 
 	// States
 	const [title, setTitle] = useState(blog.title ?? "");
@@ -181,6 +189,10 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 		},
 	});
 
+	const handleBlogLike = async () => {
+		await likeBlogById(blog.id, session.data?.user?.email as string);
+	};
+
 	useEffect(() => {
 		if (!isMobile && mobileView !== "main") {
 			setMobileView("main");
@@ -199,6 +211,21 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 		}
 	}, [blog, titleEditor, descriptionEditor, editor]);
 
+	useEffect(() => {
+		const checkIfLiked = async () => {
+			const response = await fetch(
+				`/api/likes/${blog.id}?email=${session.data?.user?.email}`
+			);
+
+			const data = (await response.json()) as BlogLikeType[];
+
+			console.log(data);
+			setLiked(data.length >= 1);
+		};
+
+		checkIfLiked();
+	}, [blog]);
+
 	return (
 		<EditorContext.Provider value={{ editor }}>
 			<div className={cn("content-wrapper overflow-y-hidden p-0")}>
@@ -206,11 +233,25 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 				{editor && (
 					<div className="px-[24px] sm:px-[40px] max-w-[640px] mx-auto">
 						<div className="max-w-[640px] my-0 mx-auto w-full mb-3 flex justify-between flex-wrap mt-2">
-							<p className="font-medium">{session.data?.user?.name}</p>
+							<p className="font-medium">{blog.user.name}</p>
 							<div className="flex gap-3 text-gray-500 font-medium dark:text-gray-400">
 								<p>{estimateReadTimeFromHTML(content)}</p>
 								{"·"}
 								<p>{format(new Date(blog.updatedAt), "MMMM d, yyyy")}</p>
+								{session.data &&
+									session.data?.user?.email !== blog.user.email && (
+										<div className="ml-3">
+											<div className="flex">
+												<HeartIcon
+													onClick={handleBlogLike}
+													className={cn(
+														`${isLiked ? "text-red-500" : ""}`,
+														"cursor-pointer"
+													)}
+												/>
+											</div>
+										</div>
+									)}
 							</div>
 						</div>
 						<div className="">

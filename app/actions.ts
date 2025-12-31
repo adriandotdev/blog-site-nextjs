@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { blogs, InsertBlogs, users } from "@/db/schema";
+import { blogLikes, blogs, InsertBlogs, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -88,4 +88,20 @@ export async function insertNewUser(user: User) {
 export async function deleteBlogById(id: number) {
 	await db.delete(blogs).where(eq(blogs.id, id));
 	revalidatePath("/blogs/drafts");
+}
+
+export async function likeBlogById(blogId: number, email: string) {
+	const user = await db
+		.select({ id: users.id })
+		.from(users)
+		.where(eq(users.email, email));
+
+	if (!user[0].id) return;
+
+	await db.insert(blogLikes).values({
+		blogId,
+		userId: user[0].id,
+	});
+
+	revalidatePath(`/blog/${blogId}`);
 }

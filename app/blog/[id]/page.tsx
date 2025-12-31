@@ -1,5 +1,5 @@
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import { SelectBlogs } from "@/db/schema";
+import { BlogWithUser } from "@/db/schema";
 import Link from "next/link";
 
 type Params = Promise<{ id: string }>;
@@ -9,7 +9,7 @@ export default async function BlogPage({ params }: { params: Params }) {
 
 	const response = await fetch(`${process.env.API_URL}/api/blogs/${id}`);
 
-	const blog = (await response.json()) as SelectBlogs;
+	const blog = (await response.json()) as BlogWithUser;
 
 	if (blog.visibility === "private") {
 		return (
