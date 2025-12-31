@@ -271,23 +271,23 @@ export function WriteEditor({
 					>
 						<div className="bubble-menu">
 							<ToolbarGroup>
-								<MarkButton type="bold" />
-								<MarkButton type="italic" />
-								<MarkButton type="strike" />
-								<MarkButton type="code" />
-								<MarkButton type="underline" />
+								<MarkButton key="bold" type="bold" />
+								<MarkButton key="italic" type="italic" />
+								<MarkButton key="strike" type="strike" />
+								<MarkButton key="code" type="code" />
+								<MarkButton key="underline" type="underline" />
 							</ToolbarGroup>
 							<ToolbarSeparator />
 							<ToolbarGroup>
-								<TextAlignButton align="left" />
-								<TextAlignButton align="center" />
-								<TextAlignButton align="right" />
-								<TextAlignButton align="justify" />
+								<TextAlignButton key="left" align="left" />
+								<TextAlignButton key="center" align="center" />
+								<TextAlignButton key="right" align="right" />
+								<TextAlignButton key="justify" align="justify" />
 							</ToolbarGroup>
 
 							<ToolbarGroup>
-								<MarkButton type="superscript" />
-								<MarkButton type="subscript" />
+								<MarkButton key="superscript" type="superscript" />
+								<MarkButton key="subscript" type="subscript" />
 							</ToolbarGroup>
 						</div>
 					</BubbleMenu>
