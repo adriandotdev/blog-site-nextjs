@@ -1,6 +1,6 @@
 # The Daily Bytes
 
-<p>Daily Bytes is a blog platform that supports markdown blocks similar to Notion. I integrated Tiptap Editor and apply what I have learned at work using NextJS.</p>
+The Daily Bytes is a blog platform integrated with the Tiptap editor that supports Markdown blocks similar to those in Notion.
 
 ## Tech Stack
 - NextJS
@@ -8,6 +8,7 @@
 - PostgreSQL
 - TailwindCSS
 - Supabase
+- Google OAuth
 
 ## Daily Bytes Pages
 
