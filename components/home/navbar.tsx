@@ -1,10 +1,7 @@
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { ModeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
-
 export default function Navbar() {
-	const router = useRouter();
-
 	return (
 		<div className="w-full">
 			<div className="py-5  flex justify-between items-center max-w-[1148px] mx-auto px-8">
@@ -21,7 +18,7 @@ export default function Navbar() {
 					<ModeToggle />
 					<Button
 						onClick={() => {
-							router.push("/signin");
+							signIn("google");
 						}}
 						className="hover:cursor-pointer bg-gradient-to-l from-orange-800  via-red-600  to-orange-400 text-white font-bold"
 					>

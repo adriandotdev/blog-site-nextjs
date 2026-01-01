@@ -44,7 +44,7 @@ export default function ProfileButton() {
 					<DropdownMenuGroup>
 						<DropdownMenuItem
 							onClick={async () => {
-								await signOut({ redirectTo: "/signin" });
+								await signOut({ redirectTo: "/" });
 							}}
 							className="font-bold"
 						>
