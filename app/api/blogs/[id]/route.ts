@@ -9,6 +9,7 @@ export async function GET(
 ) {
 	const { id } = await params;
 
+	console.log("ID: ", id);
 	const blog = await db
 		.select({
 			id: blogs.id,

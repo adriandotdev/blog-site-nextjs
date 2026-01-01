@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/sheet";
 import { useModalStore } from "@/stores/useModalStore";
 import { useSheetComponentStore } from "@/stores/useSheetComponentStore";
+import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import sanitizeHtml from "sanitize-html";
 import { toast } from "sonner";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-
 export default function PublishSheet() {
 	const { name, hideSheetComponent, payload } = useSheetComponentStore();
 
@@ -91,7 +91,7 @@ export default function PublishSheet() {
 		<Sheet open={name === "publish-sheet"} onOpenChange={hideSheetComponent}>
 			<SheetContent className="w-full md:max-w-[400px] px-4 py-8">
 				<SheetHeader>
-					<SheetTitle className="">Finishing Up</SheetTitle>
+					<SheetTitle className="text-3xl">Finishing Up</SheetTitle>
 					{/* @TODO Change this description if in prod. */}
 					<SheetDescription>Just description</SheetDescription>
 				</SheetHeader>
@@ -110,7 +110,19 @@ export default function PublishSheet() {
 						<small>Please provide tags for your article.</small>
 						<div className="flex gap-2 flex-wrap">
 							{formData.tags?.map((tag, index) => (
-								<Badge key={index}>#{tag.split(" ").join("")}</Badge>
+								<Badge className="cursor-pointer" key={index}>
+									<span>#{tag.split(" ").join("")}</span>{" "}
+									<button
+										onClick={() => {
+											setFormData((prev) => ({
+												tag: "",
+												tags: prev.tags.filter((_, i) => i !== index),
+											}));
+										}}
+									>
+										<XIcon className="cursor-pointer size-[12px]" />
+									</button>
+								</Badge>
 							))}
 						</div>
 					</div>

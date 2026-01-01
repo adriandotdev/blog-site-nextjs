@@ -21,7 +21,7 @@ export default function BlogLayout({
 				{children}
 				<EditorToolModal key="editor-tool-modal" />
 				<DialogModal key="dialog-modal" />
-				<PublishSheet />
+				<PublishSheet key="publish-sheet" />
 			</div>
 		</SidebarProvider>
 	);
