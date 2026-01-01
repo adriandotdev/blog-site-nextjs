@@ -5,6 +5,7 @@ import "./globals.css";
 
 import { EditorProvider } from "@/contexts/useEditor";
 import { lora, roboto } from "@/lib/fonts";
+
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 
