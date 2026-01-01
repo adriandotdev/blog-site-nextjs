@@ -5,7 +5,7 @@ import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
 type Params = Promise<{ id: string }>;
 
-import { SelectBlogs } from "@/db/schema";
+import { BlogWithUser, SelectBlogs } from "@/db/schema";
 import type { Metadata } from "next";
 
 type GenerateMetadataProps = {
@@ -56,7 +56,7 @@ export default async function BlogPage({ params }: { params: Params }) {
 
 	const response = await fetch(`${process.env.API_URL}/api/blogs/${id}`);
 
-	const blog = (await response.json()) as SelectBlogs;
+	const blog = (await response.json()) as BlogWithUser;
 
 	return (
 		<div className="mx-3 mt-3">
