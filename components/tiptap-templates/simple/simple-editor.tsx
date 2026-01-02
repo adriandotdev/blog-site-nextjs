@@ -224,14 +224,14 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 		};
 
 		checkIfLiked();
-	}, [blog]);
+	}, [blog, session.data?.user?.email]);
 
 	return (
 		<EditorContext.Provider value={{ editor }}>
 			<div className={cn("content-wrapper overflow-y-hidden p-0")}>
 				<EditorContent editor={titleEditor} className="title-editor-content " />
 				{editor && (
-					<div className="px-[24px] sm:px-[40px] max-w-[640px] mx-auto">
+					<div className="px-[36px] sm:px-[40px] max-w-[640px] mx-auto">
 						<div className="max-w-[640px] my-0 mx-auto w-full mb-3 flex justify-between flex-wrap mt-2">
 							<p className="font-medium">{blog.user.name}</p>
 							<div className="flex gap-3 text-gray-500 font-medium dark:text-gray-400">

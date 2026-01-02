@@ -12,10 +12,18 @@ export async function GET(
 
 	const email = searchParams.get("email");
 
+	if (!email) {
+		return NextResponse.json({ error: "Email is required" }, { status: 400 });
+	}
+
 	const user = await db
 		.select({ id: users.id })
 		.from(users)
 		.where(eq(users.email, email!));
+
+	if (!user || user.length === 0) {
+		return NextResponse.json({ error: "User not found" }, { status: 400 });
+	}
 
 	const result = await db
 		.select({ userId: blogLikes.userId, blogId: blogLikes.blogId })
