@@ -43,14 +43,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	// }),
 	providers,
 	callbacks: {
-		async signIn({ user }) {
-			if (!user?.email) return false;
-
-			const isUserExist = await existingUser(user?.email);
-
-			if (!isUserExist) {
-				await insertNewUser(user);
+		async signIn({ user, account }) {
+			if (account?.provider === "credentials") {
+				return true;
 			}
+
+			// OAuth-only logic
+			const isUserExist = await existingUser(user.email!);
+			if (!isUserExist) await insertNewUser(user);
 
 			return true;
 		},

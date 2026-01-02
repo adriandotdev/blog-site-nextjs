@@ -70,7 +70,7 @@ export async function saveBlogAsDraft(
 
 export async function existingUser(email: string) {
 	const [existingUser] = await db
-		.select()
+		.select({ id: users.id })
 		.from(users)
 		.where(eq(users.email, email));
 
@@ -81,7 +81,7 @@ export async function insertNewUser(user: User) {
 	await db.insert(users).values({
 		email: user.email ?? "",
 		name: user.name ?? "",
-		password: "",
+		password: null,
 	});
 }
 

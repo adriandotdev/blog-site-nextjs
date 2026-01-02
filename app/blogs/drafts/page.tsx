@@ -6,7 +6,7 @@ export default async function DraftsPage() {
 	const session = await auth();
 
 	const response = await fetch(
-		`http://localhost:3000/api/blogs?email=${session?.user?.email}&status=draft`
+		`${process.env.API_URL}/api/blogs?email=${session?.user?.email}&status=draft`
 	);
 	const data: BlogsResponse[] = await response.json();
 

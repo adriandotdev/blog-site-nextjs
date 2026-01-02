@@ -214,7 +214,7 @@ export function SimpleEditor({ isEditable, blog }: SimpleEditorProps) {
 	useEffect(() => {
 		const checkIfLiked = async () => {
 			const response = await fetch(
-				`/api/likes/${blog.id}?email=${session.data?.user?.email}`
+				`${process.env.API_URL}/api/likes/${blog.id}?email=${session.data?.user?.email}`
 			);
 
 			const data = (await response.json()) as BlogLikeType[];

@@ -23,7 +23,7 @@ export default async function BlogIndex() {
 	const userEmail = session?.user?.email;
 	const name = session?.user?.name;
 	const response = await fetch(
-		`http://localhost:3000/api/blogs?email=${userEmail}&status=published`
+		`${process.env.API_URL}/api/blogs?email=${userEmail}&status=published`
 	);
 	const data: BlogsResponse[] = await response.json();
 
